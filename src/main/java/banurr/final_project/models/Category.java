@@ -1,7 +1,10 @@
 package banurr.final_project.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +23,8 @@ public class Category
     private String name;
 
     private String picture;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    private List<Product> products;
 }

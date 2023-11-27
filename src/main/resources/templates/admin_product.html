@@ -46,6 +46,8 @@
             <th scope="col">PRICE</th>
             <th scope="col">IMAGE</th>
             <th scope="col">DETAILS</th>
+            <th scope="col">FEATURES</th>
+            <th scope="col">PICTURE</th>
             <th scope="col">DELETE</th>
         </tr>
         </thead>
@@ -55,7 +57,7 @@
             <td><h4 th:text="${product.name}"></h4></td>
             <td><h4 th:text="${product.price}"></h4></td>
             <td><img style="border: 1px solid black" th:src="${'/getPicture/'+product.picture}" alt="picture" width="70" height="70"></td>
-            <td><button th:class="${'btn btn-info'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#exampleModal'+product.id}"></button></td>
+            <td><button th:class="${'btn btn-primary'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#exampleModal'+product.id}"></button></td>
             <div class="modal fade" th:id="${'exampleModal'+product.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                         <div class="modal-content">
@@ -92,6 +94,51 @@
                         </div>
                 </div>
             </div>
+            <td><button th:class="${'btn btn-primary'}" th:text="${'Features'}" data-toggle="modal" th:data-target="${'#exampleModal'+product.id}"></button></td>
+            <div class="modal fade" th:id="${'exampleModal'+product.id}" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel2">Modifying product</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" data-dismiss="modal" data-target="sure">CLOSE</button>
+                            <button class="btn btn-primary" th:onclick="'updateProduct(\''+${product.id}+'\')'">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <td><button class="btn btn-info" th:text="${'Add picture'}" th:data-target="${'#picture'+product.id}" data-toggle="modal"></button></td>
+            <div class="modal fade" th:id="${'picture'+product.id}" tabindex="-1" aria-labelledby="exampleModalLabel23" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel23">Modifying product</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" th:id="${'image'+product.id}" required accept="image/*">
+                                    <label class="custom-file-label" th:for="${'image'+product.id}" aria-describedby="inputGroupFileAddon02">Choose file</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-danger" th:onclick="'resetPhoto(\''+${product.id}+'\')'">DELETE</button>
+                            <button class="btn btn-primary" th:onclick="'setPhoto(\''+${product.id}+'\')'">SUBMIT</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <td><button th:class="${'btn btn-danger'}" th:text="${'Delete'}" data-toggle="modal" th:data-target="${'#delete'+product.id}"></button></td>
             <div class="modal fade" th:id="${'delete'+product.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                 <div class="modal-dialog">
@@ -107,9 +154,7 @@
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
-                            <form th:method="${'POST'}" th:action="${'/admin/delete_product/'+product.id}">
-                                <button class="btn btn-danger">DELETE</button>
-                            </form>
+                            <button class="btn btn-danger" th:onclick="'deleteProduct(\''+${product.id}+'\')'">DELETE</button>
                         </div>
                     </div>
                 </div>
@@ -124,53 +169,127 @@
             let description = document.getElementById('description').value
             let price = document.getElementById('price').value
             let cat_id = document.getElementById('category').value
-            var category
             let picture = 'noimage.jpeg'
-            const modal = document.getElementById('addProduct');
-            modal.classList.remove('show');
-            console.log(cat_id)
+            let req = new XMLHttpRequest()
+            req.open('GET','http://localhost:8080/categories/find/'+cat_id)
+            req.send()
+            req.onload = function ()
+            {
+                let category = JSON.parse(req.responseText)
+                let product =
+                    {
+                        "name" : name,
+                        "description" : description,
+                        "price" : price,
+                        "picture" : picture,
+                        "category" : category
+                    }
+                $.ajax({
+                    type: 'POST',
+                    url: 'http://localhost:8080/products/add',
+                    contentType: 'application/json',
+                    data: JSON.stringify(product),
+                    success: function(response)
+                    {
+                        const modal = document.getElementById('addProduct');
+                        modal.classList.remove('show');
+                        window.location.href = JSON.parse(response).redirectUrl;
+                    }
+                })
+            }
+        }
+        function deleteProduct(id)
+        {
             $.ajax({
-                type: 'GET',
-                url: 'http://localhost:8080/categories/find/'+cat_id,
-                contentType: 'application/json',
+                type: 'DELETE',
+                url: 'http://localhost:8080/products/delete/'+id,
                 success: function (response)
                 {
-                    category = response
-                    let product =
+                    const modal = document.getElementById('delete'+id)
+                    modal.classList.remove('show')
+                    window.location.href = JSON.parse(response).redirectUrl;
+                }
+            })
+        }
+
+        function updateProduct(id)
+        {
+            let name = document.getElementById('new_name').value
+            let description = document.getElementById('new_description').value
+            let price = document.getElementById('new_price').value
+            let cat_id = document.getElementById('new_category').value
+            let req = new XMLHttpRequest()
+            req.open('GET','http://localhost:8080/products/find/'+id)
+            req.send()
+            req.onload = function ()
+            {
+                let product = JSON.parse(req.responseText)
+                let image = product.picture
+                console.log(image)
+                let reg = new XMLHttpRequest()
+                reg.open('GET','http://localhost:8080/categories/find/'+cat_id)
+                reg.send()
+                reg.onload = function ()
+                {
+                    let category = JSON.parse(reg.responseText)
+                    let updated_product =
                         {
+                            "id" : id,
                             "name" : name,
                             "description" : description,
                             "price" : price,
-                            "picture" : picture,
+                            "picture" : image,
                             "category" : category
                         }
+                    console.log(updated_product)
                     $.ajax({
-                        type: 'POST',
-                        url: 'http://localhost:8080/products/add',
+                        type: 'PUT',
+                        url: 'http://localhost:8080/products/update',
                         contentType: 'application/json',
-                        data: JSON.stringify(product),
-                        success: function(response)
+                        data: JSON.stringify(updated_product),
+                        success: function (response)
                         {
+                            const modal = document.getElementById('exampleModal'+id)
+                            modal.classList.remove('show')
                             window.location.href = JSON.parse(response).redirectUrl;
                         }
                     })
                 }
-            })
-
-            function updateProduct(id)
-            {
-                let cat_id = document.getElementById('new_category').value
-                $.ajax({
-                    type: 'GET',
-                    url: 'http://localhost:8080/categories/find/'+cat_id,
-                    contentType: 'application/json',
-                    success: function (response)
-                    {
-                        let category = response
-
-                    }
-                })
             }
+        }
+        function setPhoto(id)
+        {
+            var fileInput = document.getElementById('image'+id);
+            var file = fileInput.files[0];
+            var formData = new FormData();
+            formData.append("file", file);
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:8080/products/add_photo/'+id,
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response)
+                {
+                    const modal = document.getElementById('picture'+id);
+                    modal.classList.remove('show');
+                    window.location.href = JSON.parse(response).redirectUrl;
+                }
+            })
+        }
+
+        function resetPhoto(id)
+        {
+            $.ajax({
+                type: 'PUT',
+                url: 'http://localhost:8080/products/reset_photo/'+id,
+                success: function (response)
+                {
+                    const modal = document.getElementById('picture'+id);
+                    modal.classList.remove('show');
+                    window.location.href = JSON.parse(response).redirectUrl;
+                }
+            })
         }
     </script>
 </div>

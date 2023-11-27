@@ -2,6 +2,7 @@ package banurr.final_project.services;
 
 import banurr.final_project.models.Product;
 import banurr.final_project.repositories.ProductRepository;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,8 +30,6 @@ public class ProductService
         productRepository.deleteById(id);
     }
 
-    public void deleteProductByCategoryId(Long id){productRepository.deleteProductbyCategoryId(id);}
-
     public void addProduct(Product product)
     {
         productRepository.save(product);
@@ -40,10 +39,11 @@ public class ProductService
     {
         productRepository.save(product);
     }
-    public void addPicture(MultipartFile picture, Long productId)
+
+    public void setPhotoCategory(@NotNull MultipartFile multipartFile, Long id)
     {
-        var product = findProduct(productId);
-        product.setPicture(picture.getOriginalFilename());
+        Product product = findProduct(id);
+        product.setPicture(multipartFile.getOriginalFilename());
         productRepository.save(product);
     }
 }

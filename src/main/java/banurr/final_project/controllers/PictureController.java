@@ -1,13 +1,15 @@
 package banurr.final_project.controllers;
 
 import org.apache.commons.io.IOUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -17,7 +19,6 @@ import java.nio.file.Paths;
 @Controller
 public class PictureController
 {
-
     @Value("${targetPictureUrl}")
     private String targetPictureUrl;
 

@@ -1,15 +1,12 @@
 package banurr.final_project.controllers;
 
-import banurr.final_project.models.Product;
 import banurr.final_project.services.CategoryService;
 import banurr.final_project.services.FeatureService;
 import banurr.final_project.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
@@ -51,11 +48,12 @@ public class HomeController
         model.addAttribute("features", featureService.allFeatures());
         return "admin_product";
     }
-}
 
-//    @PostMapping("/admin/update_product")
-//    public String updateProduct()
-//    {
-//
-//    }
+    @GetMapping("/admin/feature")
+    public String adminFeature(Model model)
+    {
+        model.addAttribute("features", featureService.allFeatures());
+        return "admin_feature";
+    }
+}
 

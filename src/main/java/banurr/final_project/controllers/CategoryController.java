@@ -3,8 +3,6 @@ package banurr.final_project.controllers;
 import banurr.final_project.models.Category;
 import banurr.final_project.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +48,7 @@ public class CategoryController
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable(name="id") Long id,
+    public ResponseEntity<String> updateCategory(@PathVariable(name = "id" ) Long id,
                                                  @RequestBody String new_name)
     {
         Category category = categoryService.findCategory(id);

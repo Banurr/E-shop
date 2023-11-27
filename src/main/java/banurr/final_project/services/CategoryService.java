@@ -2,10 +2,8 @@ package banurr.final_project.services;
 
 import banurr.final_project.models.Category;
 import banurr.final_project.repositories.CategoryRepository;
-import banurr.final_project.repositories.ProductRepository;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,9 +14,6 @@ public class CategoryService
 {
     @Autowired
     private CategoryRepository categoryRepository;
-
-    @Autowired
-    private ProductRepository productRepository;
 
     public List<Category> allCategories()
     {
