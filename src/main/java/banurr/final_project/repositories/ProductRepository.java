@@ -12,11 +12,7 @@ import java.util.List;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>
 {
-//    @Modifying
-//    @Transactional
-//    @Query("delete from Product p where p.category.id=:id")
-//    void deleteProductbyCategoryId(Long id);
-
-//    @Query("select p from Product p where p.category.id=:id")
-//    List<Product> ProductwithCategoryId(Long id);
+    @Override
+    @Query("SELECT p FROM Product p ORDER BY p.id")
+    List<Product> findAll();
 }

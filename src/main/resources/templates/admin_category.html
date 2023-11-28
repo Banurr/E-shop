@@ -3,8 +3,7 @@
 <div layout:fragment="content">
     <button th:class="${'btn btn-success btn-lg mt-4 ml-4'}" th:text="${'Add Category'}" data-toggle="modal" th:data-target="${'#addCategory'}"></button>
     <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <form>
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalLabel">Adding new category</h5>
@@ -12,19 +11,18 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label for="name" class="col-form-label">Name:</label>
-                            <input class="form-control" id="name" name="name">
-                        </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="name" class="col-form-label">Name:</label>
+                        <input class="form-control" id="name">
                     </div>
+                </div>
                     <div class="modal-footer">
                         <button class="btn btn-secondary" data-dismiss="modal" data-target="sure">CLOSE</button>
-                        <button onclick="addCategory()" type="submit" class="btn btn-primary">SUBMIT</button>
+                        <button onclick="addCategory()" class="btn btn-primary" type="submit">SUBMIT</button>
                     </div>
             </div>
         </div>
-        </form>
     </div>
     <table th:class="${'table mt-3'}" th:style="${'width : 97%;margin:auto auto'}">
         <thead class="thead-dark">
@@ -44,7 +42,7 @@
             <td><img style="border: 1px solid black" th:src="${'/getPicture/'+category.picture}" alt="picture" width="70" height="70"></td>
             <td><button th:class="${'btn btn-primary'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#update'+category.id}"></button></td>
             <div class="modal fade" th:id="${'update'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Modifying category</h5>
@@ -55,12 +53,12 @@
                         <div class="modal-body">
                             <div class="form-group">
                                 <label th:for="${'new_name'+category.id}" class="col-form-label">Name:</label>
-                                <input type="text" class="form-control" th:id="${'new_name'+category.id}" th:value="${category.name}" required>
+                                <input type="text" class="form-control" th:id="${'new_name'+category.id}" th:value="${category.name}">
                             </div>
                         </div>
                         <div class="modal-footer">
                             <button class="btn btn-secondary" data-dismiss="modal" data-target="sure">CLOSE</button>
-                            <button class="btn btn-primary" type="submit" th:onclick="'updateCategory(\''+${category.id}+'\')'">SUBMIT</button>
+                            <button class="btn btn-primary" th:onclick="'updateCategory(\''+${category.id}+'\')'">SUBMIT</button>
                         </div>
                     </div>
                 </div>
@@ -68,7 +66,7 @@
             <td><button class="btn btn-info" th:text="${'Add picture'}" th:data-target="${'#picture'+category.id}" data-toggle="modal"></button></td>
             <div class="modal fade" th:id="${'picture'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel23" aria-hidden="true">
                 <form>
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel23">Modifying category</h5>
@@ -94,7 +92,7 @@
             </div>
             <td><button th:class="${'btn btn-danger'}" th:text="${'Delete'}" data-toggle="modal" th:data-target="${'#delete'+category.id}"></button></td>
             <div class="modal fade" th:id="${'delete'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                <div class="modal-dialog">
+                <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel1" th:text="${'You are deleting '+category.name+' category'}"></h5>
@@ -127,7 +125,6 @@
                     "name" : name,
                     "picture" : picture
                 }
-
             $.ajax({
                 type: 'POST',
                 url: 'http://localhost:8080/categories/add',
@@ -162,24 +159,31 @@
         {
             let new_name = document.getElementById('new_name'+id).value
             let req = new XMLHttpRequest()
-            req.open('GET','http://localhost:8080/categories/update/'+id)
+            req.open('GET','http://localhost:8080/categories/find/'+id)
             req.send()
             req.onload = function ()
             {
-
-            }
-            $.ajax({
-                type: 'PUT',
-                url: 'http://localhost:8080/categories/update/'+id,
-                contentType: 'application/json',
-                data: JSON.stringify(new_name),
-                success: function (response)
+                let old_category = JSON.parse(req.responseText)
+                console.log(old_category.picture)
+                let category =
                 {
-                    const modal = document.getElementById('update'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    "id" : id,
+                    "name" : new_name,
+                    "picture" : old_category.picture,
                 }
-            })
+                $.ajax({
+                    type: 'PUT',
+                    url: 'http://localhost:8080/categories/update',
+                    contentType: 'application/json',
+                    data: JSON.stringify(category),
+                    success: function (response)
+                    {
+                        const modal = document.getElementById('update'+id);
+                        modal.classList.remove('show');
+                        window.location.href = JSON.parse(response).redirectUrl;
+                    }
+                })
+            }
         }
 
         function setPhoto(id)

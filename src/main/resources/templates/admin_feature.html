@@ -3,7 +3,7 @@
 <div layout:fragment="content">
     <button th:class="${'btn btn-success btn-lg mt-4 ml-4'}" th:text="${'Add Feature'}" data-toggle="modal" th:data-target="${'#addFeature'}"></button>
     <div class="modal fade" id="addFeature" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="ModalLabel">Adding new feature</h5>
@@ -39,7 +39,7 @@
                 <td><h4 th:text="${feature.name}"></h4></td>
                 <td><button th:class="${'btn btn-primary'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#update'+feature.id}"></button></td>
                 <div class="modal fade" th:id="${'update'+feature.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel">Modifying feature</h5>
@@ -62,7 +62,7 @@
                 </div>
                 <td><button th:class="${'btn btn-danger'}" th:text="${'Delete'}" data-toggle="modal" th:data-target="${'#delete'+feature.id}"></button></td>
                 <div class="modal fade" th:id="${'delete'+feature.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
-                    <div class="modal-dialog">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel1" th:text="${'You are deleting '+feature.name+' category'}"></h5>

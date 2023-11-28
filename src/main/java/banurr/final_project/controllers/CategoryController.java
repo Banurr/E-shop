@@ -47,12 +47,9 @@ public class CategoryController
         return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable(name = "id" ) Long id,
-                                                 @RequestBody String new_name)
+    @PutMapping("/update")
+    public ResponseEntity<String> updateCategory(@RequestBody Category category)
     {
-        Category category = categoryService.findCategory(id);
-        category.setName(new_name.replace("\"",""));
         categoryService.updateCategory(category);
         return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
     }
