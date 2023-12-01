@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.exist != null}" style="width: 40%;margin: auto auto">
+        User with this email already exists!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.typo != null}" style="width: 40%;margin: auto auto">
+        Entered passwords are not matching!!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <h1 th:style="${'text-align:center'}">Register Page</h1>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form th:action="@{'/register'}" method="post">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" name="email" placeholder="Enter your email">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="password" placeholder="Enter your password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword2">Retype Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword2" name="rePassword" placeholder="Retype your password">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName">Name</label>
+                        <input type="text" class="form-control" id="exampleInputName" name="name" placeholder="Enter your name">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputName2">Surname</label>
+                        <input type="text" class="form-control" id="exampleInputName2" name="surname" placeholder="Enter your surname">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Register</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto auto;display: flex;justify-content: center">
+        <p style="margin-right: 6px">Already have no account? </p><a th:href="@{'/sign-in'}" th:text="${' Click here'}" style="text-decoration: none"></a>
+    </div>
+</div>
+</html>

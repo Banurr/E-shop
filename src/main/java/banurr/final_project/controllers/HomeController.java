@@ -1,10 +1,13 @@
 package banurr.final_project.controllers;
 
 import banurr.final_project.models.Product;
+import banurr.final_project.models.User;
 import banurr.final_project.services.CategoryService;
 import banurr.final_project.services.FeatureService;
 import banurr.final_project.services.ProductService;
+import banurr.final_project.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,19 +20,41 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class HomeController
 {
     @Autowired
+    private UserService userService;
+    @Autowired
     private ProductService productService;
-
     @Autowired
     private CategoryService categoryService;
-
     @Autowired
     private FeatureService featureService;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
-    public String home(Model model)
+    public String home()
     {
-        model.addAttribute("categories",categoryService.allCategories());
         return "home";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/sign-in")
+    public String signInPage()
+    {
+        return "sign-in";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/register")
+    public String registerPage()
+    {
+        return "register";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/register")
+    public String register(User user, @RequestParam(name = "rePassword") String rePassword)
+    {
+        String result = userService.addUser(user, rePassword);
+        return "redirect:/"+result;
     }
 
     @GetMapping("/admin")

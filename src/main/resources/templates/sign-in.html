@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" th:if="${param.success != null}" style="width: 40%;margin: auto auto">
+        User created successfully!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <h1 th:style="${'text-align:center'}">Sign-in Page</h1>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form th:action="@{'/auth'}" method="post">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="user_email" placeholder="Enter your email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="user_password" placeholder="Enter your password">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div style="margin: auto auto;display: flex;justify-content: center">
+        <p style="margin-right: 6px">Still have no account? </p><a th:href="@{'/register'}" th:text="${' Click here'}" style="text-decoration: none"></a>
+    </div>
+</div>
+</html>
