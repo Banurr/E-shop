@@ -1,8 +1,11 @@
 package banurr.final_project.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -31,4 +34,17 @@ public class Product
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Feature> features;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
+
+    public String getRating()
+    {
+        double rating = 0.0;
+        if(comments.size()==0) return String.valueOf(rating);
+        for(Comment c : comments) rating += c.getRate();
+        return String.valueOf(rating / comments.size());
+
+    }
 }

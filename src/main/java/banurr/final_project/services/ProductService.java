@@ -1,5 +1,6 @@
 package banurr.final_project.services;
 
+import banurr.final_project.models.Comment;
 import banurr.final_project.models.Product;
 import banurr.final_project.repositories.ProductRepository;
 import org.jetbrains.annotations.NotNull;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ProductService

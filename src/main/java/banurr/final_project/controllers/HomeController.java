@@ -77,7 +77,6 @@ public class HomeController
     public String removeFeature(@PathVariable(name = "id") Long id,
                                 @RequestParam(name = "feature") Long feature)
     {
-
         Product product = productService.findProduct(id);
         product.getFeatures().remove(featureService.findFeature(feature));
         productService.updateProduct(product);
@@ -85,7 +84,7 @@ public class HomeController
     }
     @PostMapping("/addFeature/{id}")
     public String addFeature(@PathVariable(name = "id") Long id,
-                                @RequestParam(name = "feature") Long feature)
+                             @RequestParam(name = "feature") Long feature)
     {
         Product product = productService.findProduct(id);
         product.getFeatures().add(featureService.findFeature(feature));
@@ -97,6 +96,21 @@ public class HomeController
     {
         model.addAttribute("categories", categoryService.allCategories());
         return "client_category";
+    }
+
+    @GetMapping("/category/{id}")
+    public String categoryDetails(@PathVariable(name = "id") Long id, Model model)
+    {
+        model.addAttribute("category", categoryService.findCategory(id));
+        return "client_category_details";
+    }
+
+    @GetMapping("/product/{id}")
+    public String productDetails(@PathVariable(name = "id") Long id,
+                                 Model model)
+    {
+        model.addAttribute("product", productService.findProduct(id));
+        return "client_product_details";
     }
 }
 
