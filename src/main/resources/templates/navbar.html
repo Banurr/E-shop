@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <img class="mr-2" th:src="${'/getPicture/'+'logo.jpeg'}" alt="no_image" width="50" height="50">
     <a class="navbar-brand" th:href="${'/'}"><b>MAGNUM</b></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -7,16 +7,17 @@
                 <a class="nav-link" th:href="${'/'}" th:text="${'Home'}"></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="${'/admin'}" th:text="${'Admin'}"></a>
+                <a class="nav-link" th:href="${'/admin'}" th:text="${'Admin'}" sec:authorize="hasRole('ROLE_ADMIN')"></a>
             </li>
             <li class="nav-item active">
                 <a class="nav-link" th:href="${'/categories'}" th:text="${'Categories'}"></a>
             </li>
-
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-success my-2 my-sm-0" type="submit">Search</button>
+        <form class="form-inline my-2 my-lg-0 w-50">
+            <input class="form-control sm-5 w-50 mr-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-success my-2 my-sm-0 mr-3" type="submit">Search</button>
         </form>
+        <img style="border-radius: 30px;object-fit: cover" th:src="${ #authentication.name.equals('anonymousUser') ? '/getPicture/anonymous.jpeg' : '/getPicture/'+ #authentication.principal.picture}" alt="picture" width="50" height="50">
+        <a class="btn btn-warning ml-2 btn-lg" th:href="${ #authentication.name.equals('anonymousUser') ? '/sign-in' : '/profile'}" th:text="${ #authentication.name.equals('anonymousUser') ? 'Sign-in' : #authentication.principal.name}"> </a>
     </div>
 </nav>

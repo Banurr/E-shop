@@ -53,16 +53,37 @@ public class HomeController
     @PostMapping("/register")
     public String register(User user, @RequestParam(name = "rePassword") String rePassword)
     {
+        System.out.println(user);
         String result = userService.addUser(user, rePassword);
         return "redirect:/"+result;
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/profile")
+    public String profilePage()
+    {
+        return "profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/updatePassword")
+    public String updatePassword(@RequestParam String currentPassword,
+                                 @RequestParam String newPassword,
+                                 @RequestParam String renewPassword)
+    {
+
+        String result = userService.updatePassword(currentPassword, newPassword, renewPassword);
+        return "redirect:/"+result;
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin")
     public String adminPanel()
     {
         return "admin_panel";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/category")
     public String adminCategory(Model model)
     {
@@ -70,6 +91,7 @@ public class HomeController
         return "admin_category";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/product")
     public String adminProduct(Model model)
     {
@@ -79,6 +101,7 @@ public class HomeController
         return "admin_product";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/feature")
     public String adminFeature(Model model)
     {
@@ -86,18 +109,21 @@ public class HomeController
         return "admin_feature";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/users")
     public String adminUsers()
     {
         return "admin_user";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping("/admin/comments")
     public String adminComments()
     {
         return "admin_comment";
     }
 
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/removeFeature/{id}")
     public String removeFeature(@PathVariable(name = "id") Long id,
                                 @RequestParam(name = "feature") Long feature)
@@ -107,6 +133,9 @@ public class HomeController
         productService.updateProduct(product);
         return "redirect:/admin/product";
     }
+
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/addFeature/{id}")
     public String addFeature(@PathVariable(name = "id") Long id,
                              @RequestParam(name = "feature") Long feature)
@@ -116,6 +145,8 @@ public class HomeController
         productService.updateProduct(product);
         return "redirect:/admin/product";
     }
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/categories")
     public String allCategories(Model model)
     {
@@ -123,6 +154,7 @@ public class HomeController
         return "client_category";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/category/{id}")
     public String categoryDetails(@PathVariable(name = "id") Long id, Model model)
     {
@@ -130,6 +162,7 @@ public class HomeController
         return "client_category_details";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/product/{id}")
     public String productDetails(@PathVariable(name = "id") Long id,
                                  Model model)

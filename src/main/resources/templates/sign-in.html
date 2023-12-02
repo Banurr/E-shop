@@ -7,6 +7,12 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.error != null}" style="width: 40%;margin: auto auto">
+        Login or password is not correct!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
     <h1 th:style="${'text-align:center'}">Sign-in Page</h1>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -14,12 +20,12 @@
                 <form th:action="@{'/auth'}" method="post">
                     <div class="form-group">
                         <label for="exampleInputEmail1">Email address</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="user_email" placeholder="Enter your email">
+                        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="user_email" placeholder="Enter your email" required>
                         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
                     </div>
                     <div class="form-group">
                         <label for="exampleInputPassword1">Password</label>
-                        <input type="password" class="form-control" id="exampleInputPassword1" name="user_password" placeholder="Enter your password">
+                        <input type="password" class="form-control" id="exampleInputPassword1" name="user_password" placeholder="Enter your password" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </form>
@@ -29,5 +35,10 @@
     <div style="margin: auto auto;display: flex;justify-content: center">
         <p style="margin-right: 6px">Still have no account? </p><a th:href="@{'/register'}" th:text="${' Click here'}" style="text-decoration: none"></a>
     </div>
+    <script type="text/javascript">
+        $(".alert").delay(2500).fadeOut(1000, function() {
+            $(this).alert('close');
+        });
+    </script>
 </div>
 </html>

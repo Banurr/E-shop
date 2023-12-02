@@ -32,11 +32,13 @@ public class User implements UserDetails
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private String picture;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @Override

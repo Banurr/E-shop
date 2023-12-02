@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<div layout:fragment="content">
+    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert" th:if="${param.success != null}" style="width: 40%;margin: auto auto">
+        Password updated successfully!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.notright != null}" style="width: 40%;margin: auto auto">
+        You current password is not correct!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.same != null}" style="width: 40%;margin: auto auto">
+        Your new password is you current password!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert" th:if="${param.notmatch != null}" style="width: 40%;margin: auto auto">
+        Entered passwords are not matching!!
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <h1 style="text-align: center" th:text="${'Hello, '+ #authentication.principal.name +'  this is your profile page'}"></h1>
+    <a class="btn btn-info" th:href="@{'/logout'}" th:text="${'Log out'}"></a>
+    <button th:class="${'btn btn-primary'}" th:text="${'Update Password'}" data-toggle="modal" data-target="#exampleModal"></button>
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modifying product</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{'/updatePassword'}" method="post">
+                        <div class="form-group">
+                            <label for="exampleInputPassword1">Your current Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword1" name="currentPassword" placeholder="Enter your current password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputPassword2">New Password</label>
+                            <input type="password" class="form-control" id="exampleInputPassword2" name="newPassword" placeholder="Enter new password" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="exampleInputName">Retype New Password</label>
+                            <input type="password" class="form-control" id="exampleInputName" name="renewPassword" placeholder="Retype new password" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(".alert").delay(2500).fadeOut(1000, function() {
+            $(this).alert('close');
+        });
+    </script>
+</div>
+</html>

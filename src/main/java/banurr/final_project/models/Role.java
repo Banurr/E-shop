@@ -1,15 +1,18 @@
 package banurr.final_project.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 
-@Entity
-@Table(name = "roles")
+import java.util.List;
+
 @Getter
 @Setter
-
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name="roles")
+@Builder
 public class Role implements GrantedAuthority
 {
     @Id

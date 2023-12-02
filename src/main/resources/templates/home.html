@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <div layout:fragment="content">
     <h1 th:style="${'text-align:center'}">Welcome to the App Name</h1>
-    <a class="btn btn-info" th:href="@{'/logout'}" th:text="${'Log out'}"></a>
 </div>
 </html>

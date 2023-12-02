@@ -5,6 +5,9 @@ import banurr.final_project.models.User;
 import banurr.final_project.repositories.RoleRepository;
 import banurr.final_project.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -49,5 +52,23 @@ public class UserService implements UserDetailsService
         user.setRoles(List.of(role));
         userRepository.save(user);
         return "sign-in?success";
+    }
+
+    public User getCurrentUser()
+    {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if(authentication instanceof AnonymousAuthenticationToken) return null;
+        return (User) authentication.getPrincipal();
+    }
+
+    public String updatePassword(String currentPassword, String newPassword, String renewPassword)
+    {
+        User user = getCurrentUser();
+        if(passwordEncoder.matches(user.getPassword(), newPassword)) return "profile?same";
+        if(!passwordEncoder.matches(currentPassword, user.getPassword())) return "profile?notright";
+        if(!newPassword.equals(renewPassword)) return "profile?notmatch";
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return "profile?success";
     }
 }
