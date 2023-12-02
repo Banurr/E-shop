@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -70,5 +71,26 @@ public class UserService implements UserDetailsService
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return "profile?success";
+    }
+
+    public void updateDetails(String name, String surname)
+    {
+        User user = getCurrentUser();
+        user.setName(name);
+        user.setSurname(surname);
+        userRepository.save(user);
+    }
+
+    public void setImage(MultipartFile multipartFile)
+    {
+        User user = getCurrentUser();
+        user.setPicture(multipartFile.getOriginalFilename());
+        userRepository.save(user);
+    }
+
+    public void deleteAccount()
+    {
+        User user = getCurrentUser();
+        userRepository.delete(user);
     }
 }

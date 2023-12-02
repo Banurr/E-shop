@@ -7,17 +7,25 @@
                 <a class="nav-link" th:href="${'/'}" th:text="${'Home'}"></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="${'/admin'}" th:text="${'Admin'}" sec:authorize="hasRole('ROLE_ADMIN')"></a>
+                <a class="nav-link" th:href="${'/categories'}" th:text="${'Categories'}"></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" th:href="${'/categories'}" th:text="${'Categories'}"></a>
+                <a class="nav-link" th:href="${'/admin'}" th:text="${'Admin'}" sec:authorize="hasRole('ROLE_ADMIN')"></a>
             </li>
         </ul>
         <form class="form-inline my-2 my-lg-0 w-50">
             <input class="form-control sm-5 w-50 mr-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-success my-2 my-sm-0 mr-3" type="submit">Search</button>
         </form>
-        <img style="border-radius: 30px;object-fit: cover" th:src="${ #authentication.name.equals('anonymousUser') ? '/getPicture/anonymous.jpeg' : '/getPicture/'+ #authentication.principal.picture}" alt="picture" width="50" height="50">
-        <a class="btn btn-warning ml-2 btn-lg" th:href="${ #authentication.name.equals('anonymousUser') ? '/sign-in' : '/profile'}" th:text="${ #authentication.name.equals('anonymousUser') ? 'Sign-in' : #authentication.principal.name}"> </a>
+        <a class="btn btn-warning mr-4" th:href="${ '/sign-in' }" th:text="${ 'Sign-in' }" th:if="${ #authentication.name.equals('anonymousUser') }"></a>
+        <div class="dropdown mr-3" th:unless="${ #authentication.name.equals('anonymousUser') }">
+            <img style="border-radius: 30px;object-fit: cover" th:src="${ '/getPicture/' + #authentication.principal.picture}" alt="picture" width="50" height="50">
+            <button class="btn btn-warning dropdown-toggle ml-2" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th:text="${ #authentication.principal.name }">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" th:href="${ '/profile' }" th:text="${ 'Profile page' }"></a>
+                <a class="dropdown-item" th:href="@{'/logout'}" th:text="${'Log out'}"></a>
+            </div>
+        </div>
     </div>
 </nav>

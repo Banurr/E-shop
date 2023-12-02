@@ -13,9 +13,11 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    <h1 th:style="${'text-align:center'}">Register Page</h1>
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" style="margin: auto auto">Register</h5>
+            </div>
             <div class="modal-body">
                 <form th:action="@{'/register'}" method="post">
                     <div class="form-group">
