@@ -93,4 +93,11 @@ public class UserService implements UserDetailsService
         User user = getCurrentUser();
         userRepository.delete(user);
     }
+
+    public void resetImage()
+    {
+        User user = getCurrentUser();
+        user.setPicture("anonymous.jpeg");
+        userRepository.save(user);
+    }
 }

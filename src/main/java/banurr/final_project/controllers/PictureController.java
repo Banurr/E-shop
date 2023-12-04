@@ -31,6 +31,7 @@ public class PictureController
     {
         InputStream in = new ClassPathResource(loadPictureUrl + picture).getInputStream();
         return IOUtils.toByteArray(in);
+
     }
 
     public void addPictureLocal(MultipartFile picture) throws IOException

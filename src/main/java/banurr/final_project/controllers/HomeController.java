@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 
 
@@ -30,6 +31,9 @@ public class HomeController
 
     @Autowired
     private PictureController pictureController;
+
+    private int a;
+    private int b;
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
@@ -63,8 +67,12 @@ public class HomeController
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
-    public String profilePage()
+    public String profilePage(Model model)
     {
+        a = (int)(Math.random()*10);
+        b = (int)(Math.random()*10);
+        model.addAttribute("a",  a);
+        model.addAttribute("b", b);
         return "profile";
     }
 
@@ -98,9 +106,18 @@ public class HomeController
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/deleteAccount")
-    public String deleteAccount()
+    @PostMapping("/resetImage")
+    public String resetImage()
     {
+        userService.resetImage();
+        return "redirect:/profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/deleteAccount")
+    public String deleteAccount(@RequestParam Integer answer)
+    {
+        if(a+b!=answer) return "redirect:/profile";
         userService.deleteAccount();
         return "redirect:/logout";
     }

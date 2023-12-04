@@ -104,8 +104,8 @@
                             <div class="modal-body">
                                 <div class="input-group">
                                     <div class="custom-file">
-                                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" accept="image/*">
-                                        <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" accept="image/*" required>
+                                        <label  for="inputGroupFile04">Choose file</label>
                                     </div>
                                 </div>
                             </div>
@@ -113,6 +113,11 @@
                                 <button type="submit" class="btn btn-primary mt-3">Set</button>
                             </div>
                             </form>
+                            <div class="modal-footer">
+                            <form th:action="@{'/resetImage'}" method="post">
+                                <button class="btn btn-danger mt-3">Reset</button>
+                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -122,6 +127,7 @@
                 <div class="modal fade" id="Delete" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
+                            <form th:action="${'/deleteAccount'}" method="post">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="exampleModalLabel4">You want to delete your account</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -129,14 +135,16 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h4>ARE YOU SURE?</h4>
+                                <div class="form-group">
+                                    <label for="deletion" style="font-weight: bold" th:text="${'Please solve this equation : '+a+' + '+b}"></label>
+                                    <input type="number" class="form-control" id="deletion" name="answer" required>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-secondary" data-dismiss="modal">CLOSE</button>
-                                <form th:action="${'/deleteAccount'}" method="post">
                                 <button class="btn btn-danger">DELETE</button>
-                                </form>
                             </div>
+                            </form>
                         </div>
                     </div>
                 </div>
