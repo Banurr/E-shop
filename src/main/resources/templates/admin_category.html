@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html">
 <div layout:fragment="content">
-    <button th:class="${'btn btn-success btn-lg mt-4 ml-4'}" th:text="${'Add Category'}" data-toggle="modal" th:data-target="${'#addCategory'}"></button>
+    <button class="btn btn-success btn-lg mt-4 ml-4" data-toggle="modal" data-target="#addCategory">Add Category</button>
     <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -17,14 +17,14 @@
                         <input class="form-control" id="name">
                     </div>
                 </div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" data-dismiss="modal" data-target="sure">CLOSE</button>
-                        <button onclick="addCategory()" class="btn btn-primary" type="submit">SUBMIT</button>
-                    </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-dismiss="modal" data-target="sure">CLOSE</button>
+                    <button class="btn btn-primary" type="submit" onclick="addCategory()">SUBMIT</button>
+                </div>
             </div>
         </div>
     </div>
-    <table th:class="${'table mt-3'}" th:style="${'width : 97%;margin:auto auto'}">
+    <table class="table mt-3" style="width : 97%;margin:auto auto">
         <thead class="thead-dark">
         <tr>
             <th scope="col">ID</th>
@@ -40,7 +40,7 @@
             <td><h4 th:text="${category.id}"></h4></td>
             <td><h4 th:text="${category.name}"></h4></td>
             <td><img style="border: 1px solid black" th:src="${'/getPicture/'+category.picture}" alt="picture" width="70" height="70"></td>
-            <td><button th:class="${'btn btn-primary'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#update'+category.id}"></button></td>
+            <td><button class="btn btn-primary" data-toggle="modal" th:data-target="${'#update'+category.id}">Details</button></td>
             <div class="modal fade" th:id="${'update'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -63,9 +63,8 @@
                     </div>
                 </div>
             </div>
-            <td><button class="btn btn-info" th:text="${'Add picture'}" th:data-target="${'#picture'+category.id}" data-toggle="modal"></button></td>
+            <td><button class="btn btn-info" th:data-target="${'#picture'+category.id}" data-toggle="modal">Add picture</button></td>
             <div class="modal fade" th:id="${'picture'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel23" aria-hidden="true">
-                <form>
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -88,9 +87,8 @@
                         </div>
                     </div>
                 </div>
-                </form>
             </div>
-            <td><button th:class="${'btn btn-danger'}" th:text="${'Delete'}" data-toggle="modal" th:data-target="${'#delete'+category.id}"></button></td>
+            <td><button class="btn btn-danger" data-toggle="modal" th:data-target="${'#delete'+category.id}">Delete</button></td>
             <div class="modal fade" th:id="${'delete'+category.id}" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
@@ -115,10 +113,14 @@
 
     </table>
     <script type="text/javascript">
-
         function addCategory()
         {
             let name = document.getElementById('name').value;
+            if (name.trim() === "")
+            {
+                alert("Please fill out everything");
+                return;
+            }
             let picture = 'noimage.jpeg'
             let category =
                 {
@@ -127,29 +129,26 @@
                 }
             $.ajax({
                 type: 'POST',
-                url: 'http://localhost:8080/categories/add',
+                url: '/categories/add',
                 contentType: 'application/json',
                 data: JSON.stringify(category),
-                success: function(response)
+                success: function (response)
                 {
-                    const modal = document.getElementById('addCategory');
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
-            });
+            })
         }
 
         function deleteCategory(id)
         {
             $.ajax({
                 type: 'DELETE',
-                url: 'http://localhost:8080/categories/delete/'+id,
+                url: '/categories/delete',
                 contentType: 'application/json',
+                data: JSON.stringify(id),
                 success: function (response)
                 {
-                    const modal = document.getElementById('delete'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
         }
@@ -172,14 +171,12 @@
                 }
                 $.ajax({
                     type: 'PUT',
-                    url: 'http://localhost:8080/categories/update',
+                    url: '/categories/update',
                     contentType: 'application/json',
                     data: JSON.stringify(category),
                     success: function (response)
                     {
-                        const modal = document.getElementById('update'+id);
-                        modal.classList.remove('show');
-                        window.location.href = JSON.parse(response).redirectUrl;
+                        window.location.replace(response);
                     }
                 })
             }
@@ -193,15 +190,13 @@
             formData.append("file", file);
                 $.ajax({
                 type: 'PUT',
-                url: 'http://localhost:8080/categories/add_photo/'+id,
+                url: '/categories/add_photo/'+id,
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response)
                 {
-                    const modal = document.getElementById('picture'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
         }
@@ -210,12 +205,12 @@
         {
             $.ajax({
                 type: 'PUT',
-                url: 'http://localhost:8080/categories/reset_photo/'+id,
+                url: '/categories/reset_photo',
+                contentType: 'application/json',
+                data: JSON.stringify(id),
                 success: function (response)
                 {
-                    const modal = document.getElementById('picture'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
         }

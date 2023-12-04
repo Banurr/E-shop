@@ -101,23 +101,19 @@
                                 </button>
                             </div>
                             <form th:action="@{'/setImage'}" method="post" enctype="multipart/form-data">
-                            <div class="modal-body">
-                                <div class="input-group">
+                                <div class="modal-body">
                                     <div class="custom-file">
-                                        <input type="file" name="file" class="custom-file-input" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" accept="image/*" required>
-                                        <label  for="inputGroupFile04">Choose file</label>
+                                        <label for="imageInput" class="custom-file-label">Choose an Image:</label>
+                                        <input type="file" id="imageInput" onchange="displayImage(this)" required accept="image/*" name="file">
+                                        <div id="imagePreview"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="submit" class="btn btn-primary mt-3">Set</button>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Set</button>
+                                    <button class="btn btn-danger" onclick="resetImage()">Reset</button>
+                                </div>
                             </form>
-                            <div class="modal-footer">
-                            <form th:action="@{'/resetImage'}" method="post">
-                                <button class="btn btn-danger mt-3">Reset</button>
-                            </form>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -156,6 +152,36 @@
         $(".alert").delay(2500).fadeOut(1000, function() {
             $(this).alert('close');
         });
+        function displayImage(input) {
+            const imagePreview = document.getElementById('imagePreview');
+
+            while (imagePreview.firstChild) {
+                imagePreview.removeChild(imagePreview.firstChild);
+            }
+
+            const files = input.files;
+
+            if (files.length > 0)
+            {
+                const image = document.createElement('img');
+                image.src = URL.createObjectURL(files[0]);
+                image.style.maxWidth = '70px';
+                image.style.maxHeight = '70px';
+                imagePreview.appendChild(image);
+            }
+        }
+        function resetImage()
+        {
+            fetch('/resetImage', {
+                method: 'POST',
+            })
+                .then(response => {
+                    if (response.ok) {
+                        // Redirect to profile page
+                        window.location.href = '/profile';
+                    }
+                })
+        }
     </script>
 </div>
 </html>

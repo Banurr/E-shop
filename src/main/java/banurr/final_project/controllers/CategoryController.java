@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.io.IOException;
 import java.util.List;
@@ -37,38 +38,38 @@ public class CategoryController
     public ResponseEntity<String> addCategory(@RequestBody Category category)
     {
         categoryService.addCategory(category);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id)
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteCategory(@RequestBody Long id)
     {
         categoryService.deleteCategory(id);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateCategory(@RequestBody Category category)
     {
         categoryService.updateCategory(category);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/add_photo/{id}")
     public ResponseEntity<String> setPhoto(@RequestPart(name="file") MultipartFile multipartFile,
-                                           @PathVariable(name="id") Long id) throws IOException
+                                 @PathVariable(name="id") Long id) throws IOException
     {
         categoryService.setPhotoCategory(multipartFile,id);
         pictureController.addPictureLocal(multipartFile);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
-    @PutMapping("/reset_photo/{id}")
-    public ResponseEntity<String> removePhoto(@PathVariable(name="id") Long id)
+    @PutMapping("/reset_photo")
+    public ResponseEntity<String> removePhoto(@RequestBody Long id)
     {
         Category category = categoryService.findCategory(id);
         category.setPicture("noimage.jpeg");
         categoryService.updateCategory(category);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 }
