@@ -57,7 +57,7 @@ public class CategoryController
 
     @PutMapping("/add_photo/{id}")
     public ResponseEntity<String> setPhoto(@RequestPart(name="file") MultipartFile multipartFile,
-                                 @PathVariable(name="id") Long id) throws IOException
+                                           @PathVariable(name = "id") Long id) throws IOException
     {
         categoryService.setPhotoCategory(multipartFile,id);
         pictureController.addPictureLocal(multipartFile);

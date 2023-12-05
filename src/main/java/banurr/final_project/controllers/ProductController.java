@@ -38,20 +38,20 @@ public class ProductController
     public ResponseEntity<String> addProduct(@RequestBody Product product)
     {
         productService.addProduct(product);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateProduct(@RequestBody Product product)
     {
         productService.updateProduct(product);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id)
     {
         productService.deleteProduct(id);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/add_photo/{id}")
@@ -60,7 +60,7 @@ public class ProductController
     {
         productService.setPhotoCategory(multipartFile,id);
         pictureController.addPictureLocal(multipartFile);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/reset_photo/{id}")
@@ -69,6 +69,6 @@ public class ProductController
         Product category = productService.findProduct(id);
         category.setPicture("noimage.jpeg");
         productService.updateProduct(category);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 }

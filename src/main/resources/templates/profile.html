@@ -105,15 +105,14 @@
                                     <div class="custom-file">
                                         <label for="imageInput" class="custom-file-label">Choose an Image:</label>
                                         <input type="file" id="imageInput" onchange="displayImage(this)" required accept="image/*" name="file">
-                                        <div id="imagePreview"></div>
                                     </div>
                                 </div>
+                                <div id="imagePreview" class="ml-3 mb-3"></div>
                                 <div class="modal-footer">
                                     <button type="submit" class="btn btn-primary">Set</button>
                                     <button class="btn btn-danger" onclick="resetImage()">Reset</button>
                                 </div>
                             </form>
-
                         </div>
                     </div>
                 </div>
@@ -152,22 +151,44 @@
         $(".alert").delay(2500).fadeOut(1000, function() {
             $(this).alert('close');
         });
-        function displayImage(input) {
+        function displayImage(input)
+        {
             const imagePreview = document.getElementById('imagePreview');
-
-            while (imagePreview.firstChild) {
-                imagePreview.removeChild(imagePreview.firstChild);
-            }
+            imagePreview.innerHTML = ''; // Clear existing content
 
             const files = input.files;
 
-            if (files.length > 0)
-            {
-                const image = document.createElement('img');
-                image.src = URL.createObjectURL(files[0]);
-                image.style.maxWidth = '70px';
-                image.style.maxHeight = '70px';
-                imagePreview.appendChild(image);
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Check for valid image data
+                    if (!e.target.result.startsWith('data:image/')) {
+                        console.error('Invalid image format:', e.target.result);
+                        return;
+                    }
+
+                    const previewImage = document.createElement('img');
+                    previewImage.src = e.target.result; // Object URL of the image
+                    previewImage.style.maxWidth = '200px'; // Set fixed width
+                    previewImage.style.maxHeight = '200px'; // Set fixed height
+                    imagePreview.appendChild(previewImage);
+
+                    // Optionally check image aspect ratio and adjust styles
+                    if (previewImage.naturalWidth > previewImage.naturalHeight) {
+                        previewImage.style.height = 'auto';
+                        previewImage.style.maxWidth = '100%'; // Adjust max width if needed
+                    } else {
+                        previewImage.style.width = 'auto';
+                        previewImage.style.maxHeight = '100%'; // Adjust max height if needed
+                    }
+                };
+
+                // Added try-catch for file reading errors
+                try {
+                    reader.readAsDataURL(files[0]);
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                }
             }
         }
         function resetImage()

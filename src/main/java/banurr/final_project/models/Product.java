@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 @Getter
@@ -32,7 +31,7 @@ public class Product
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     private Set<Feature> features;
 
     @JsonIgnore

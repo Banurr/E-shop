@@ -26,20 +26,20 @@ public class FeatureController
     public ResponseEntity<String> addFeature(@RequestBody Feature feature)
     {
         featureService.addFeature(feature);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteFeature(@PathVariable(name = "id" ) Long id)
     {
         featureService.deleteFeature(id);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 
     @PutMapping("/update")
     public ResponseEntity<String> updateFeature(@RequestBody Feature feature)
     {
         featureService.updateFeature(feature);
-        return ResponseEntity.ok("{\"redirectUrl\": \"" + redirectUrl + "\"}");
+        return ResponseEntity.ok(redirectUrl);
     }
 }

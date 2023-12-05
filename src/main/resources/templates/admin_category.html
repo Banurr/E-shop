@@ -76,11 +76,12 @@
                         <div class="modal-body">
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" th:id="${'image'+category.id}" required accept="image/*">
+                                    <input type="file" th:onchange="'displayImage(this,\''+${category.id}+'\')'" class="custom-file-input" th:id="${'image'+category.id}" required accept="image/*">
                                     <label class="custom-file-label" th:for="${'image'+category.id}" aria-describedby="inputGroupFileAddon02">Choose file</label>
                                 </div>
                             </div>
                         </div>
+                        <div th:id="${'imagePreview'+category.id}" class="ml-3 mb-3"></div>
                         <div class="modal-footer">
                             <button class="btn btn-danger" th:onclick="'resetPhoto(\''+${category.id}+'\')'">DELETE</button>
                             <button class="btn btn-primary" th:onclick="'setPhoto(\''+${category.id}+'\')'">SUBMIT</button>
@@ -157,7 +158,7 @@
         {
             let new_name = document.getElementById('new_name'+id).value
             let req = new XMLHttpRequest()
-            req.open('GET','http://localhost:8080/categories/find/'+id)
+            req.open('GET','/categories/find/'+id)
             req.send()
             req.onload = function ()
             {
@@ -184,21 +185,62 @@
 
         function setPhoto(id)
         {
-            var fileInput = document.getElementById('image'+id);
-            var file = fileInput.files[0];
-            var formData = new FormData();
+            let fileInput = document.getElementById('image'+id);
+            let file = fileInput.files[0];
+            let formData = new FormData();
             formData.append("file", file);
                 $.ajax({
                 type: 'PUT',
                 url: '/categories/add_photo/'+id,
-                data: formData,
-                processData: false,
+                processData: false, // Keep FormData untouched
                 contentType: false,
+                data: formData,
                 success: function (response)
                 {
                     window.location.replace(response);
                 }
             })
+        }
+
+        function displayImage(input,id)
+        {
+            const imagePreview = document.getElementById('imagePreview'+id);
+            imagePreview.innerHTML = ''; // Clear existing content
+
+            const files = input.files;
+
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Check for valid image data
+                    if (!e.target.result.startsWith('data:image/')) {
+                        console.error('Invalid image format:', e.target.result);
+                        return;
+                    }
+
+                    const previewImage = document.createElement('img');
+                    previewImage.src = e.target.result; // Object URL of the image
+                    previewImage.style.maxWidth = '200px'; // Set fixed width
+                    previewImage.style.maxHeight = '200px'; // Set fixed height
+                    imagePreview.appendChild(previewImage);
+
+                    // Optionally check image aspect ratio and adjust styles
+                    if (previewImage.naturalWidth > previewImage.naturalHeight) {
+                        previewImage.style.height = 'auto';
+                        previewImage.style.maxWidth = '100%'; // Adjust max width if needed
+                    } else {
+                        previewImage.style.width = 'auto';
+                        previewImage.style.maxHeight = '100%'; // Adjust max height if needed
+                    }
+                };
+
+                // Added try-catch for file reading errors
+                try {
+                    reader.readAsDataURL(files[0]);
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                }
+            }
         }
 
         function resetPhoto(id)

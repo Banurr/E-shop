@@ -136,11 +136,12 @@
                         <div class="modal-body">
                             <div class="input-group mb-3">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" th:id="${'image'+product.id}" required accept="image/*">
+                                    <input type="file" class="custom-file-input" th:onchange="'displayImage(this,\''+${product.id}+'\')'" th:id="${'image'+product.id}" required accept="image/*">
                                     <label class="custom-file-label" th:for="${'image'+product.id}" aria-describedby="inputGroupFileAddon02">Choose file</label>
                                 </div>
                             </div>
                         </div>
+                        <div th:id="${'imagePreview'+product.id}" class="ml-3 mb-3"></div>
                         <div class="modal-footer">
                             <button class="btn btn-danger" th:onclick="'resetPhoto(\''+${product.id}+'\')'">DELETE</button>
                             <button class="btn btn-primary" th:onclick="'setPhoto(\''+${product.id}+'\')'">SUBMIT</button>
@@ -180,7 +181,7 @@
             let cat_id = document.getElementById('category').value
             let picture = 'noimage.jpeg'
             let req = new XMLHttpRequest()
-            req.open('GET','http://localhost:8080/categories/find/'+cat_id)
+            req.open('GET','/categories/find/'+cat_id)
             req.send()
             req.onload = function ()
             {
@@ -195,14 +196,12 @@
                     }
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost:8080/products/add',
+                    url: '/products/add',
                     contentType: 'application/json',
                     data: JSON.stringify(product),
                     success: function(response)
                     {
-                        const modal = document.getElementById('addProduct');
-                        modal.classList.remove('show');
-                        window.location.href = JSON.parse(response).redirectUrl;
+                        window.location.replace(response);
                     }
                 })
             }
@@ -211,12 +210,10 @@
         {
             $.ajax({
                 type: 'DELETE',
-                url: 'http://localhost:8080/products/delete/'+id,
+                url: '/products/delete/'+id,
                 success: function (response)
                 {
-                    const modal = document.getElementById('delete'+id)
-                    modal.classList.remove('show')
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
         }
@@ -228,14 +225,14 @@
             let price = document.getElementById('new_price'+id).value
             let cat_id = document.getElementById('new_category'+id).value
             let req = new XMLHttpRequest()
-            req.open('GET','http://localhost:8080/products/find/'+id)
+            req.open('GET','/products/find/'+id)
             req.send()
             req.onload = function ()
             {
                 let product = JSON.parse(req.responseText)
                 let image = product.picture
                 let reg = new XMLHttpRequest()
-                reg.open('GET','http://localhost:8080/categories/find/'+cat_id)
+                reg.open('GET','/categories/find/'+cat_id)
                 reg.send()
                 reg.onload = function ()
                 {
@@ -251,14 +248,12 @@
                         }
                     $.ajax({
                         type: 'PUT',
-                        url: 'http://localhost:8080/products/update',
+                        url: '/products/update',
                         contentType: 'application/json',
                         data: JSON.stringify(updated_product),
                         success: function (response)
                         {
-                            const modal = document.getElementById('exampleModal'+id)
-                            modal.classList.remove('show')
-                            window.location.href = JSON.parse(response).redirectUrl;
+                            window.location.replace(response);
                         }
                     })
                 }
@@ -272,29 +267,66 @@
             formData.append("file", file);
             $.ajax({
                 type: 'PUT',
-                url: 'http://localhost:8080/products/add_photo/'+id,
+                url: '/products/add_photo/'+id,
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response)
                 {
-                    const modal = document.getElementById('picture'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
+        }
+
+        function displayImage(input,id)
+        {
+            const imagePreview = document.getElementById('imagePreview'+id);
+            imagePreview.innerHTML = ''; // Clear existing content
+
+            const files = input.files;
+
+            if (files.length > 0) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Check for valid image data
+                    if (!e.target.result.startsWith('data:image/')) {
+                        console.error('Invalid image format:', e.target.result);
+                        return;
+                    }
+
+                    const previewImage = document.createElement('img');
+                    previewImage.src = e.target.result; // Object URL of the image
+                    previewImage.style.maxWidth = '200px'; // Set fixed width
+                    previewImage.style.maxHeight = '200px'; // Set fixed height
+                    imagePreview.appendChild(previewImage);
+
+                    // Optionally check image aspect ratio and adjust styles
+                    if (previewImage.naturalWidth > previewImage.naturalHeight) {
+                        previewImage.style.height = 'auto';
+                        previewImage.style.maxWidth = '100%'; // Adjust max width if needed
+                    } else {
+                        previewImage.style.width = 'auto';
+                        previewImage.style.maxHeight = '100%'; // Adjust max height if needed
+                    }
+                };
+
+                // Added try-catch for file reading errors
+                try {
+                    reader.readAsDataURL(files[0]);
+                } catch (error) {
+                    console.error('Error reading file:', error);
+                }
+            }
         }
 
         function resetPhoto(id)
         {
             $.ajax({
                 type: 'PUT',
-                url: 'http://localhost:8080/products/reset_photo/'+id,
+                url: '/products/reset_photo/'+id,
                 success: function (response)
                 {
-                    const modal = document.getElementById('picture'+id);
-                    modal.classList.remove('show');
-                    window.location.href = JSON.parse(response).redirectUrl;
+                    window.location.replace(response);
                 }
             })
         }

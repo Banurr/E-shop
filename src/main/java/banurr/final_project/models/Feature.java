@@ -3,6 +3,8 @@ package banurr.final_project.models;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -18,4 +20,7 @@ public class Feature
     private Long id;
 
     private String name;
+
+    @ManyToMany
+    private Set<Product> products;
 }
