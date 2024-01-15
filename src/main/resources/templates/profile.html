@@ -117,7 +117,7 @@
                     </div>
                 </div>
             </li>
-            <li class="list-group-item">
+            <li class="list-group-item" sec:authorize="!hasRole('ROLE_ADMIN')">
                 <button th:class="${'btn btn-danger'}" th:text="${'Delete Account'}" data-toggle="modal" data-target="#Delete"></button>
                 <div class="modal fade" id="Delete" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">

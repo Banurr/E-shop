@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html">
 <div layout:fragment="content">
-    <div class="card mb-3 mt-4" style="width: 26rem;text-align: center;height:34rem;margin : auto auto;display: block">
-            <div class="card-header" style="font-size: 25px"><h3 th:text="${product.name}"></h3></div>
-            <div class="card-body" style="text-align: center">
-                <h3 th:text="${'Description :'+product.description}"></h3>
-                <h4 th:text="${product.price+' T'}"></h4>
-                <a style="text-decoration: none;font-size: 30px" th:href="${'/category/'+product.category.id}"><h3 th:text="${product.category.name}"></h3></a>
-                <img th:src="${'/getPicture/'+product.picture}" width="280" height="240" style="border : 1px solid black">
-                <h4 th:text="${product.comments.size()==0 ? 'No one left comments , be first' : 'Average Rating is : '+product.getRating().substring(0,3)}"></h4>
-            </div>
+    <div class="jumbotron w-75">
+        <h1 class="display-4" th:text="${product.name}"></h1>
+        <p class="lead" th:text="${product.description}"></p>
+        <hr class="my-4">
+        <img th:src="${'/getPicture/'+product.picture}" width="280" height="240" style="border : 1px solid black">
+        <p th:text="${product.price+'$'}"></p>
+        <button class="btn btn-success" th:unless="${ contains }">Add to basket</button>
+        <button class="btn btn-primary" th:if="${ contains }">Already in basket</button>
     </div>
+
     <div style="width: 23rem" class="ms-3">
         <div class="card mb-3 mt-4" style="text-align: center" th:each="comment : ${product.comments}">
             <div class="card-header" style="font-size: 25px"><h3 th:text="${comment.user.name+' '+comment.user.surname+' commented'}"></h3></div>

@@ -4,6 +4,7 @@ import banurr.final_project.models.Product;
 import banurr.final_project.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,18 +24,21 @@ public class ProductController
     private PictureController pictureController;
 
     @GetMapping("/all")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Product> getProducts()
     {
         return productService.allProducts();
     }
 
     @GetMapping("/find/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Product getProduct(@PathVariable(name = "id") Long id)
     {
         return productService.findProduct(id);
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addProduct(@RequestBody Product product)
     {
         productService.addProduct(product);
@@ -42,12 +46,14 @@ public class ProductController
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> updateProduct(@RequestBody Product product)
     {
         productService.updateProduct(product);
         return ResponseEntity.ok(redirectUrl);
     }
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteProduct(@PathVariable(name = "id") Long id)
     {
         productService.deleteProduct(id);
@@ -55,6 +61,7 @@ public class ProductController
     }
 
     @PutMapping("/add_photo/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> setPhoto(@RequestPart(name="file") MultipartFile multipartFile,
                                            @PathVariable(name="id") Long id) throws IOException
     {
@@ -64,6 +71,7 @@ public class ProductController
     }
 
     @PutMapping("/reset_photo/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> removePhoto(@PathVariable(name="id") Long id)
     {
         Product category = productService.findProduct(id);

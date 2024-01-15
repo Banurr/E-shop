@@ -5,6 +5,7 @@ import banurr.final_project.models.Product;
 import banurr.final_project.services.FeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -17,12 +18,14 @@ public class FeatureController
     private FeatureService featureService;
 
     @GetMapping("/find/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public Feature getFeature(@PathVariable(name = "id") Long id)
     {
         return featureService.findFeature(id);
     }
 
     @PostMapping("/add")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> addFeature(@RequestBody Feature feature)
     {
         featureService.addFeature(feature);
@@ -30,6 +33,7 @@ public class FeatureController
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> deleteFeature(@PathVariable(name = "id" ) Long id)
     {
         featureService.deleteFeature(id);
@@ -37,6 +41,7 @@ public class FeatureController
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public ResponseEntity<String> updateFeature(@RequestBody Feature feature)
     {
         featureService.updateFeature(feature);

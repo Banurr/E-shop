@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
-    <img class="mr-2" th:src="${'/getPicture/'+'logo.jpeg'}" alt="no_image" width="50" height="50">
+    <img class="mr-2" th:src="${'/getPicture/'+'logo.png'}" alt="no_image" width="50" height="50">
     <a class="navbar-brand" th:href="${'/'}"><b>MAGNUM</b></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
@@ -24,6 +24,7 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" th:href="${ '/profile' }" th:text="${ 'Profile page' }"></a>
+                <a class="dropdown-item" th:href="${ '/basket' }" th:text="${ 'Your basket' }"></a>
                 <a class="dropdown-item" th:href="@{'/logout'}" th:text="${'Log out'}"></a>
             </div>
         </div>

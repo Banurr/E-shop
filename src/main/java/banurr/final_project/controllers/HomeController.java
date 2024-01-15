@@ -1,11 +1,15 @@
 package banurr.final_project.controllers;
 
+import banurr.final_project.models.Basket;
+import banurr.final_project.models.BasketItem;
 import banurr.final_project.models.Product;
 import banurr.final_project.models.User;
 import banurr.final_project.services.CategoryService;
 import banurr.final_project.services.FeatureService;
 import banurr.final_project.services.ProductService;
 import banurr.final_project.services.UserService;
+import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -15,6 +19,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -60,7 +68,6 @@ public class HomeController
     @PostMapping("/register")
     public String register(User user, @RequestParam(name = "rePassword") String rePassword)
     {
-        System.out.println(user);
         String result = userService.addUser(user, rePassword);
         return "redirect:/"+result;
     }
@@ -74,6 +81,16 @@ public class HomeController
         model.addAttribute("a",  a);
         model.addAttribute("b", b);
         return "profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/basket")
+    public String basketPage(Model model)
+    {
+        User user = userService.getCurrentUser();
+        Basket basket = user.getBasket();
+        model.addAttribute("basket", basket);
+        return "basket";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -213,7 +230,21 @@ public class HomeController
     public String productDetails(@PathVariable(name = "id") Long id,
                                  Model model)
     {
-        model.addAttribute("product", productService.findProduct(id));
+        boolean contain = false;
+        ArrayList<Product> products = userService.getCurrentUser().getBasket().getItems().stream()
+                .map(BasketItem::getProduct) // Assumes a getter for the product
+                .collect(Collectors.toCollection(ArrayList::new));
+        for(Product p : products)
+        {
+            if(p.getId().equals(id))
+            {
+                contain = true;
+                break;
+            }
+        }
+        Product product = productService.findProduct(id);
+        model.addAttribute("product", product);
+        model.addAttribute("contains", contain);
         return "client_product_details";
     }
 }

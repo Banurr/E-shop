@@ -26,6 +26,8 @@ public class Product
 
     private Long price;
 
+    private int quantity;
+
     private String picture;
 
     @ManyToOne(fetch = FetchType.EAGER)

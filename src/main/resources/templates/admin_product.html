@@ -43,7 +43,7 @@
         <tr>
             <th scope="col">ID</th>
             <th scope="col">NAME</th>
-            <th scope="col">PRICE</th>
+            <th scope="col">QUANTITY</th>
             <th scope="col">IMAGE</th>
             <th scope="col">DETAILS</th>
             <th scope="col">FEATURES</th>
@@ -55,7 +55,7 @@
         <tr th:each="product : ${products}">
             <td><h4 th:text="${product.id}"></h4></td>
             <td><h4 th:text="${product.name}"></h4></td>
-            <td><h4 th:text="${product.price}"></h4></td>
+            <td><h4 th:text="${product.quantity}"></h4></td>
             <td><img style="border: 1px solid black" th:src="${'/getPicture/'+product.picture}" alt="picture" width="70" height="70"></td>
             <td><button th:class="${'btn btn-primary'}" th:text="${'Details'}" data-toggle="modal" th:data-target="${'#exampleModal'+product.id}"></button></td>
             <div class="modal fade" th:id="${'exampleModal'+product.id}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -1,5 +1,6 @@
 package banurr.final_project.services;
 
+import banurr.final_project.models.Basket;
 import banurr.final_project.models.Role;
 import banurr.final_project.models.User;
 import banurr.final_project.repositories.RoleRepository;
@@ -26,6 +27,9 @@ public class UserService implements UserDetailsService
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private BasketService basketService;
+
     public List<User> allUsers()
     {
         return userRepository.findAll();
@@ -50,6 +54,9 @@ public class UserService implements UserDetailsService
         if(!user.getPassword().equals(rePassword)) return "register?typo";
         user.setPassword(passwordEncoder.encode(rePassword));
         Role role = roleRepository.findRoleUser();
+        Basket basket = new Basket();
+        basketService.addBasket(basket);
+        user.setBasket(basket);
         user.setRoles(List.of(role));
         userRepository.save(user);
         return "sign-in?success";
