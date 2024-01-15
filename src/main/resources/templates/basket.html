@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org" layout:decorate="layout/main.html" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<div layout:fragment="content">
+  <h1 th:style="${'text-align:center'}">Your basket</h1>
+  <h1 th:unless="${ basket.items.size() == 0}" th:each="item : ${ basket.items }" th:text="${ item.product.name + ' ' + item.quantity}"></h1>
+  <h1 th:if="${ basket.items.size() == 0}">Your basket is empty</h1>
+<!--  <h1 th:if="${ user.basket.items.size() }">Is Empty</h1>-->
+<!--  <h1 th:unless="${ user.basket.items.size() }">Here is your basket</h1>-->
+</div>
+</html>
