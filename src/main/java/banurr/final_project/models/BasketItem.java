@@ -17,7 +17,7 @@ public class BasketItem
     private Long id;
 
     @ManyToOne
-    private Basket basket;
+    private User user;
 
     @ManyToOne
     private Product product;

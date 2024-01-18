@@ -1,6 +1,5 @@
 package banurr.final_project.controllers;
 
-import banurr.final_project.models.Basket;
 import banurr.final_project.models.BasketItem;
 import banurr.final_project.models.Product;
 import banurr.final_project.models.User;
@@ -8,8 +7,6 @@ import banurr.final_project.services.CategoryService;
 import banurr.final_project.services.FeatureService;
 import banurr.final_project.services.ProductService;
 import banurr.final_project.services.UserService;
-import jakarta.transaction.Transactional;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -88,8 +84,15 @@ public class HomeController
     public String basketPage(Model model)
     {
         User user = userService.getCurrentUser();
-        Basket basket = user.getBasket();
+        List<BasketItem> basket = user.getBasket();
+        basket.sort((a,b)-> (int)(a.getId()-b.getId()));
+        double total = 0;
+        for(BasketItem basketItem : basket)
+        {
+            total += basketItem.getProduct().getPrice()*basketItem.getQuantity();
+        }
         model.addAttribute("basket", basket);
+        model.addAttribute("total", total);
         return "basket";
     }
 
@@ -231,8 +234,8 @@ public class HomeController
                                  Model model)
     {
         boolean contain = false;
-        ArrayList<Product> products = userService.getCurrentUser().getBasket().getItems().stream()
-                .map(BasketItem::getProduct) // Assumes a getter for the product
+        ArrayList<Product> products = userService.getCurrentUser().getBasket().stream()
+                .map(BasketItem::getProduct)
                 .collect(Collectors.toCollection(ArrayList::new));
         for(Product p : products)
         {

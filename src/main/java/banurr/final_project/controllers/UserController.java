@@ -1,10 +1,17 @@
 package banurr.final_project.controllers;
 
+import banurr.final_project.models.BasketItem;
+import banurr.final_project.models.Product;
 import banurr.final_project.models.User;
+import banurr.final_project.services.BasketItemService;
+import banurr.final_project.services.ProductService;
 import banurr.final_project.services.UserService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 
@@ -27,5 +34,40 @@ public class UserController
     public void deleteUser(@RequestBody Long id)
     {
         userService.deleteUser(id);
+    }
+
+    @PostMapping("/addToBasketFirst/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public RedirectView addToBasketFirst(@PathVariable Long id)
+    {
+        String result = userService.addToBasketFirst(id);
+        return new RedirectView("/product/"+id+"?"+result);
+    }
+
+    @Transactional
+    @GetMapping("/addToBasket/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public RedirectView addToBasket(@PathVariable Long id)
+    {
+        userService.addToBasket(id);
+        return new RedirectView("/basket");
+    }
+
+    @Transactional
+    @GetMapping("/removeFromBasket/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public RedirectView removeFromBasket(@PathVariable Long id)
+    {
+        userService.removeFromBasket(id);
+        return new RedirectView("/basket");
+    }
+
+    @Transactional
+    @GetMapping("/deleteFromBasket/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public RedirectView deleteFromBasket(@PathVariable Long id)
+    {
+        userService.deleteFromBasket(id);
+        return new RedirectView("/basket");
     }
 }
