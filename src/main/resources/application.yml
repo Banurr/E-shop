@@ -15,7 +15,7 @@ spring:
 server:
     servlet:
         session:
-            timeout: '180s'
+            timeout: '600s'
 
 loadPictureUrl: static/pictures/
 targetPictureUrl: build/resources/main/static/pictures/

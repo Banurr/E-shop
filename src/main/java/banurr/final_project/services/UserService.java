@@ -4,12 +4,9 @@ import banurr.final_project.models.BasketItem;
 import banurr.final_project.models.Product;
 import banurr.final_project.models.Role;
 import banurr.final_project.models.User;
-import banurr.final_project.repositories.BasketItemRepository;
 import banurr.final_project.repositories.RoleRepository;
 import banurr.final_project.repositories.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +16,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +33,7 @@ public class UserService implements UserDetailsService
     private ProductService productService;
 
     @Autowired
-    private BasketItemService basketItemService;
+    private HttpSession httpSession;
 
     public List<User> allUsers()
     {
@@ -68,8 +64,6 @@ public class UserService implements UserDetailsService
         if(!user.getPassword().equals(rePassword)) return "register?typo";
         user.setPassword(passwordEncoder.encode(rePassword));
         Role role = roleRepository.findRoleUser();
-        List<BasketItem> basket = new ArrayList<>();
-        user.setBasket(basket);
         user.setRoles(List.of(role));
         userRepository.save(user);
         return "sign-in?success";
@@ -124,50 +118,51 @@ public class UserService implements UserDetailsService
     public String addToBasketFirst(Long id)
     {
         Product product = productService.findProduct(id);
-        if(product.getQuantity() <= 0 ) return "error";
-        User user = getCurrentUser();
-        BasketItem basketItem = BasketItem
-                .builder()
-                .user(user)
-                .quantity(1)
+        if(product.getQuantity() <= 0) return "error";
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
+        BasketItem basketItem = BasketItem.builder()
                 .product(product)
+                .quantity(1)
                 .build();
-        basketItemService.addBasketItem(basketItem);
-        List<BasketItem> basketItems = user.getBasket();
-        basketItems.add(basketItem);
-        user.setBasket(basketItems);
-        updateUser(user);
+        basket.add(basketItem);
+        httpSession.setAttribute("basket", basket);
         return "success";
     }
 
 
-    public void addToBasket(Long id)
+    public void addToBasket(int id)
     {
-        BasketItem basketItem = basketItemService.findBasketItem(id);
-        if(basketItem.getProduct().getQuantity() > 0)
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
+        BasketItem basketItem = basket.get(id);
+        if(basketItem.getProduct().getQuantity() >= basketItem.getQuantity()+1)
         {
-            basketItemService.plusBasketItemQuantity(id);
+            basketItem.setQuantity(basketItem.getQuantity()+1);
+            basket.set(id,basketItem);
         }
+        httpSession.setAttribute("basket",basket);
     }
 
 
-    public void removeFromBasket(Long id)
+    public void removeFromBasket(int id)
     {
-        BasketItem basketItem = basketItemService.findBasketItem(id);
-        if(basketItem.getQuantity() == 1)
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
+        BasketItem basketItem = basket.get(id);
+        if(basketItem.getQuantity()==1)
         {
-            basketItemService.deleteBasketItem(basketItem);
+            deleteFromBasket(id);
         }
-        else if(basketItem.getQuantity()>1)
+        else if (basketItem.getQuantity() > 1)
         {
-            basketItemService.minusBasketItemQuantity(id);
+            basketItem.setQuantity(basketItem.getQuantity()-1);
+            basket.set(id,basketItem);
         }
+        httpSession.setAttribute("basket",basket);
     }
 
-
-    public void deleteFromBasket(Long id)
+    public void deleteFromBasket(int id)
     {
-        BasketItem basketItem = basketItemService.findBasketItem(id);
-        basketItemService.deleteBasketItem(basketItem);
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
+        basket.remove(id);
+        httpSession.setAttribute("basket",basket);
     }
 }

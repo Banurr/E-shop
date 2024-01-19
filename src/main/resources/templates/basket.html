@@ -78,7 +78,6 @@
         }
         </style>
     <h1 th:if="${ basket.size() == 0}" style="text-align: center">Your Shopping Cart is empty</h1>
-    <h1 th:style="${'text-align:center'}" th:if="${ basket.size() != 0}">Your Shopping Cart</h1>
     <div class="card">
         <div class="row">
             <div class="col-md-8 cart">
@@ -96,11 +95,12 @@
                             <div class="row" th:text="${basketItem.product.name}"></div>
                         </div>
                         <div class="col">
-                            <a th:href="${'users/removeFromBasket/'+basketItem.id}">-</a>
+                            <a th:href="${'users/deleteFromBasket/'+basket.indexOf(basketItem)}" >&#x1F5D1;</a>
+                            <a th:href="${'users/removeFromBasket/'+basket.indexOf(basketItem)}">-</a>
                             <a class="border" th:text="${basketItem.quantity}"></a>
-                            <a th:href="${'users/addToBasket/'+basketItem.id}">+</a>
+                            <a th:href="${'users/addToBasket/'+basket.indexOf(basketItem)}">+</a>
                         </div>
-                        <div class="col">&dollar;<a th:href="${'users/deleteFromBasket/'+basketItem.id}" style="margin-left: 20px">&#x1F5D1;</a></div>
+                        <div class="col" th:text="${(basketItem.quantity*basketItem.product.price)+' $'}"></div>
                     </div>
                 </div>
                 <div class="back-to-shop"><a th:href="${'/'}">&leftarrow;</a><span class="text-muted">Back to shop</span></div>

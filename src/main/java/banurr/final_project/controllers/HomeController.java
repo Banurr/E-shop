@@ -7,6 +7,7 @@ import banurr.final_project.services.CategoryService;
 import banurr.final_project.services.FeatureService;
 import banurr.final_project.services.ProductService;
 import banurr.final_project.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @Controller
 public class HomeController
@@ -36,13 +35,20 @@ public class HomeController
     @Autowired
     private PictureController pictureController;
 
+    @Autowired
+    private HttpSession httpSession;
+
     private int a;
     private int b;
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/")
     public String home()
     {
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
+        if(basket == null)
+        {
+            httpSession.setAttribute("basket",new ArrayList<BasketItem>());
+        }
         return "home";
     }
 
@@ -72,6 +78,7 @@ public class HomeController
     @GetMapping("/profile")
     public String profilePage(Model model)
     {
+
         a = (int)(Math.random()*10);
         b = (int)(Math.random()*10);
         model.addAttribute("a",  a);
@@ -83,9 +90,7 @@ public class HomeController
     @GetMapping("/basket")
     public String basketPage(Model model)
     {
-        User user = userService.getCurrentUser();
-        List<BasketItem> basket = user.getBasket();
-        basket.sort((a,b)-> (int)(a.getId()-b.getId()));
+        List<BasketItem> basket = (List<BasketItem>) httpSession.getAttribute("basket");
         double total = 0;
         for(BasketItem basketItem : basket)
         {
@@ -212,7 +217,6 @@ public class HomeController
         return "redirect:/admin/product";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/categories")
     public String allCategories(Model model)
     {
@@ -220,31 +224,35 @@ public class HomeController
         return "client_category";
     }
 
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/category/{id}")
     public String categoryDetails(@PathVariable(name = "id") Long id, Model model)
     {
         model.addAttribute("category", categoryService.findCategory(id));
         return "client_category_details";
     }
-
-    @PreAuthorize("isAuthenticated()")
     @GetMapping("/product/{id}")
     public String productDetails(@PathVariable(name = "id") Long id,
                                  Model model)
     {
         boolean contain = false;
-        ArrayList<Product> products = userService.getCurrentUser().getBasket().stream()
-                .map(BasketItem::getProduct)
-                .collect(Collectors.toCollection(ArrayList::new));
-        for(Product p : products)
+        List<BasketItem> list = (List<BasketItem>) httpSession.getAttribute("basket");
+        if(list != null)
         {
-            if(p.getId().equals(id))
+            List<Product> products = new ArrayList<>();
+            for(BasketItem b : list)
             {
-                contain = true;
-                break;
+                products.add(b.getProduct());
+            }
+            for(Product p : products)
+            {
+                if(p.getId().equals(id))
+                {
+                    contain = true;
+                    break;
+                }
             }
         }
+
         Product product = productService.findProduct(id);
         model.addAttribute("product", product);
         model.addAttribute("contains", contain);

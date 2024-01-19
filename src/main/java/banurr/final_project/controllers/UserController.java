@@ -1,15 +1,10 @@
 package banurr.final_project.controllers;
-
-import banurr.final_project.models.BasketItem;
-import banurr.final_project.models.Product;
 import banurr.final_project.models.User;
-import banurr.final_project.services.BasketItemService;
-import banurr.final_project.services.ProductService;
 import banurr.final_project.services.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -21,6 +16,9 @@ public class UserController
 {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private HttpSession httpSession;
 
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -47,7 +45,7 @@ public class UserController
     @Transactional
     @GetMapping("/addToBasket/{id}")
     @PreAuthorize("isAuthenticated()")
-    public RedirectView addToBasket(@PathVariable Long id)
+    public RedirectView addToBasket(@PathVariable int id)
     {
         userService.addToBasket(id);
         return new RedirectView("/basket");
@@ -56,7 +54,7 @@ public class UserController
     @Transactional
     @GetMapping("/removeFromBasket/{id}")
     @PreAuthorize("isAuthenticated()")
-    public RedirectView removeFromBasket(@PathVariable Long id)
+    public RedirectView removeFromBasket(@PathVariable int id)
     {
         userService.removeFromBasket(id);
         return new RedirectView("/basket");
@@ -65,7 +63,7 @@ public class UserController
     @Transactional
     @GetMapping("/deleteFromBasket/{id}")
     @PreAuthorize("isAuthenticated()")
-    public RedirectView deleteFromBasket(@PathVariable Long id)
+    public RedirectView deleteFromBasket(@PathVariable int id)
     {
         userService.deleteFromBasket(id);
         return new RedirectView("/basket");
