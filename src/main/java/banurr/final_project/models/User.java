@@ -40,7 +40,7 @@ public class User implements UserDetails
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Order> orders;
 
     @Override

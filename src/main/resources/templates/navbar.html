@@ -24,7 +24,8 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" th:href="${ '/profile' }" th:text="${ 'Profile page' }"></a>
-                <a class="dropdown-item" th:href="${ '/basket' }" th:text="${ 'Your basket' }"></a>
+                <a class="dropdown-item" th:href="${ '/basket' }" th:text="${ 'My basket' }"></a>
+                <a class="dropdown-item" th:href="${ '/myOrders' }" th:text="${ 'Order history' }"></a>
                 <a class="dropdown-item" th:href="@{'/logout'}" th:text="${'Log out'}"></a>
             </div>
         </div>

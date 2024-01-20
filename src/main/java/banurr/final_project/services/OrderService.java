@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class OrderService
@@ -20,6 +21,7 @@ public class OrderService
     @Autowired
     private OrderItemService orderItemService;
 
+    @Autowired UserService userService;
 
     public void createOrder(ArrayList<BasketItem> basket)
     {
@@ -38,6 +40,7 @@ public class OrderService
         }
         Order order = Order.builder()
                 .orderItems(orderItems)
+                .user(userService.getCurrentUser())
                 .orderStatus(OrderStatus.CREATED)
                 .dateTime(LocalDateTime.now())
                 .build();
@@ -47,5 +50,15 @@ public class OrderService
     public void addOrder(Order order)
     {
         orderRepository.save(order);
+    }
+
+    public List<Order> allOrders()
+    {
+        return orderRepository.findAll();
+    }
+
+    public List<Order> findUserOrders(Long id)
+    {
+        return orderRepository.findUserOrders(id);
     }
 }

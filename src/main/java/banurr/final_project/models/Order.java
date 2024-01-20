@@ -18,10 +18,25 @@ public class Order
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
+
     @OneToMany(fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
     private LocalDateTime dateTime;
 
     private OrderStatus orderStatus;
+
+
+    public double orderTotal()
+    {
+        double total = 0;
+        if(orderItems.size()==0) return total;
+        for(OrderItem orderItem : orderItems)
+        {
+            total += orderItem.getQuantity()*orderItem.getProduct().getPrice();
+        }
+        return total;
+    }
 }

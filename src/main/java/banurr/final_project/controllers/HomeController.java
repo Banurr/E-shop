@@ -1,12 +1,10 @@
 package banurr.final_project.controllers;
 
 import banurr.final_project.models.BasketItem;
+import banurr.final_project.models.Order;
 import banurr.final_project.models.Product;
 import banurr.final_project.models.User;
-import banurr.final_project.services.CategoryService;
-import banurr.final_project.services.FeatureService;
-import banurr.final_project.services.ProductService;
-import banurr.final_project.services.UserService;
+import banurr.final_project.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,6 +29,8 @@ public class HomeController
     private CategoryService categoryService;
     @Autowired
     private FeatureService featureService;
+    @Autowired
+    private OrderService orderService;
 
     @Autowired
     private PictureController pictureController;
@@ -99,6 +99,15 @@ public class HomeController
         model.addAttribute("basket", basket);
         model.addAttribute("total", total);
         return "basket";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myOrders")
+    public String myOrders(Model model)
+    {
+        List<Order> orders = orderService.findUserOrders(userService.getCurrentUser().getId());
+        model.addAttribute("orders", orders);
+        return "myOrders";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -204,7 +213,6 @@ public class HomeController
         productService.updateProduct(product);
         return "redirect:/admin/product";
     }
-
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/addFeature/{id}")

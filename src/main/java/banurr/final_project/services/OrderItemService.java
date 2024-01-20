@@ -15,14 +15,4 @@ public class OrderItemService
     {
         orderItemRepository.save(orderItem);
     }
-
-    public void deleteOrderItem(OrderItem orderItem)
-    {
-        orderItemRepository.delete(orderItem);
-    }
-
-    public OrderItem findOrderItem(Long id)
-    {
-        return orderItemRepository.findById(id).orElse(null);
-    }
 }
