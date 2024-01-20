@@ -41,6 +41,9 @@ public class User implements UserDetails
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Order> orders;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities()
     {

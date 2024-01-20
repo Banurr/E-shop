@@ -81,6 +81,10 @@
                                     <input type="number" class="form-control" th:id="${'new_price'+product.id}" min="0" required th:value="${product.price}">
                                 </div>
                                 <div class="form-group">
+                                    <label for="price" class="col-form-label">Quantity:</label>
+                                    <input type="number" class="form-control" th:id="${'new_quantity'+product.id}" min="0" required th:value="${product.quantity}">
+                                </div>
+                                <div class="form-group">
                                     <label for="category" class="col-form-label">Category:</label>
                                     <select class="custom-select" th:id="${'new_category'+product.id}" required>
                                         <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}" th:selected="${category.id==product.category.id}">
@@ -223,7 +227,9 @@
             let name = document.getElementById('new_name'+id).value
             let description = document.getElementById('new_description'+id).value
             let price = document.getElementById('new_price'+id).value
+            let quantity = document.getElementById('new_quantity'+id).value
             let cat_id = document.getElementById('new_category'+id).value
+
             let req = new XMLHttpRequest()
             req.open('GET','/products/find/'+id)
             req.send()
@@ -244,7 +250,8 @@
                             "description" : description,
                             "price" : price,
                             "picture" : image,
-                            "category" : category
+                            "category" : category,
+                            "quantity" : quantity
                         }
                     $.ajax({
                         type: 'PUT',

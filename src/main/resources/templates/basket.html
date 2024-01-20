@@ -111,7 +111,9 @@
                     <div class="col">TOTAL PRICE</div>
                     <div class="col text-right" th:text="${total + ' $'}"></div>
                 </div>
-                <button class="btn btn-lg btn-primary">ORDER</button>
+                <form th:action="${'/orders/create'}" method="post">
+                <button class="btn btn-lg btn-primary" th:if="${basket.size()!=0}">ORDER</button>
+                </form>
             </div>
         </div>
     </div>
