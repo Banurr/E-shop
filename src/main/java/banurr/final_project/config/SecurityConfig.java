@@ -42,7 +42,7 @@ public class SecurityConfig
                 .usernameParameter("user_email")
                 .passwordParameter("user_password")
                 .loginPage("/sign-in")
-                .defaultSuccessUrl("/profile")
+                .defaultSuccessUrl("/")
                 .failureUrl("/sign-in?error"));
 
         httpSecurity.logout(logout -> logout.logoutUrl("/logout")

@@ -239,10 +239,9 @@ public class HomeController
         if(list != null)
         {
             List<Product> products = new ArrayList<>();
-            for(BasketItem b : list)
-            {
-                products.add(b.getProduct());
-            }
+
+            for(BasketItem b : list) products.add(b.getProduct());
+
             for(Product p : products)
             {
                 if(p.getId().equals(id))
@@ -252,7 +251,6 @@ public class HomeController
                 }
             }
         }
-
         Product product = productService.findProduct(id);
         model.addAttribute("product", product);
         model.addAttribute("contains", contain);

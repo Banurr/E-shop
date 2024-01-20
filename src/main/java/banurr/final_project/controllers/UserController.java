@@ -17,9 +17,6 @@ public class UserController
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private HttpSession httpSession;
-
     @GetMapping("/all")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<User> allUsers()
