@@ -1,7 +1,6 @@
 package banurr.final_project.controllers;
 
 import banurr.final_project.models.Feature;
-import banurr.final_project.models.Product;
 import banurr.final_project.services.FeatureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

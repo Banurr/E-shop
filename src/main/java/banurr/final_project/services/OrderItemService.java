@@ -2,7 +2,6 @@ package banurr.final_project.services;
 
 import banurr.final_project.models.OrderItem;
 import banurr.final_project.repositories.OrderItemRepository;
-import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,7 +1,6 @@
 package banurr.final_project.controllers;
 import banurr.final_project.models.User;
 import banurr.final_project.services.UserService;
-import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
