@@ -46,4 +46,9 @@ public class ProductService
         product.setPicture(multipartFile.getOriginalFilename());
         productRepository.save(product);
     }
+
+    public List<Product> searchProducts(String pattern)
+    {
+        return productRepository.searchProducts(pattern);
+    }
 }

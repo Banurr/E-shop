@@ -131,8 +131,8 @@
                             </div>
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="deletion" style="font-weight: bold" th:text="${'Please solve this equation : '+a+' + '+b}"></label>
-                                    <input type="number" class="form-control" id="deletion" name="answer" required>
+                                    <label for="deletion" style="font-weight: bold" th:text="${'Please enter : DELETION '}"></label>
+                                    <input type="text" class="form-control" id="deletion" name="deletion" required>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -148,7 +148,8 @@
     </div>
 
     <script type="text/javascript">
-        $(".alert").delay(2500).fadeOut(1000, function() {
+        $(".alert").delay(2500).fadeOut(1000, function()
+        {
             $(this).alert('close');
         });
         function displayImage(input)

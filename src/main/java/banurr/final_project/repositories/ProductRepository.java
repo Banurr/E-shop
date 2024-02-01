@@ -13,4 +13,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>
     @Override
     @Query("SELECT p FROM Product p ORDER BY p.id")
     List<Product> findAll();
+
+    @Query("SELECT p FROM Product p WHERE LOWER(p.name) LIKE LOWER(concat('%', :pattern, '%'))")
+    List<Product> searchProducts(String pattern);
 }

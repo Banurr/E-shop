@@ -1,7 +1,6 @@
 package banurr.final_project.controllers;
 import banurr.final_project.models.User;
 import banurr.final_project.services.UserService;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +37,6 @@ public class UserController
         return new RedirectView("/product/"+id+"?"+result);
     }
 
-    @Transactional
     @GetMapping("/addToBasket/{id}")
     @PreAuthorize("isAuthenticated()")
     public RedirectView addToBasket(@PathVariable int id)
@@ -47,7 +45,6 @@ public class UserController
         return new RedirectView("/basket");
     }
 
-    @Transactional
     @GetMapping("/removeFromBasket/{id}")
     @PreAuthorize("isAuthenticated()")
     public RedirectView removeFromBasket(@PathVariable int id)
@@ -56,7 +53,6 @@ public class UserController
         return new RedirectView("/basket");
     }
 
-    @Transactional
     @GetMapping("/deleteFromBasket/{id}")
     @PreAuthorize("isAuthenticated()")
     public RedirectView deleteFromBasket(@PathVariable int id)

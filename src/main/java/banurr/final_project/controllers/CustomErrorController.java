@@ -10,7 +10,7 @@ public class CustomErrorController implements ErrorController
     @RequestMapping("/error")
     public String handleError()
     {
-        // Provide your custom error page view name
+        System.out.println("Some error occured");// Provide your custom error page view name
         return "error";
     }
 

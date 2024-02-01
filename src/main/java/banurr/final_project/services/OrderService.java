@@ -45,6 +45,12 @@ public class OrderService
                 .dateTime(LocalDateTime.now())
                 .build();
         addOrder(order);
+        User user = userService.getCurrentUser();
+        List<Order> user_orders = user.getOrders();
+        user_orders.add(order);
+        user.setOrders(user_orders);
+        userService.updateUser(user);
+
     }
 
     public void addOrder(Order order)

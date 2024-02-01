@@ -28,11 +28,10 @@ public class Order
 
     private OrderStatus orderStatus;
 
-
     public double orderTotal()
     {
         double total = 0;
-        if(orderItems.size()==0) return total;
+        if(orderItems == null) return total;
         for(OrderItem orderItem : orderItems)
         {
             total += orderItem.getQuantity()*orderItem.getProduct().getPrice();

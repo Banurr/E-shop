@@ -49,7 +49,6 @@ public class SecurityConfig
                 .logoutSuccessUrl("/sign-in"));
 
 
-
         return httpSecurity.build();
 
     }

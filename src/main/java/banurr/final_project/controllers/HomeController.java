@@ -38,9 +38,6 @@ public class HomeController
     @Autowired
     private HttpSession httpSession;
 
-    private int a;
-    private int b;
-
     @GetMapping("/")
     public String home()
     {
@@ -76,13 +73,8 @@ public class HomeController
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
-    public String profilePage(Model model)
+    public String profilePage()
     {
-
-        a = (int)(Math.random()*10);
-        b = (int)(Math.random()*10);
-        model.addAttribute("a",  a);
-        model.addAttribute("b", b);
         return "profile";
     }
 
@@ -149,9 +141,9 @@ public class HomeController
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/deleteAccount")
-    public String deleteAccount(@RequestParam Integer answer)
+    public String deleteAccount(@RequestParam String deletion)
     {
-        if(a+b!=answer) return "redirect:/profile";
+        if(!deletion.equals("DELETION")) return "redirect:/profile";
         userService.deleteAccount();
         return "redirect:/logout";
     }
@@ -201,6 +193,13 @@ public class HomeController
     public String adminComments()
     {
         return "admin_comment";
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @GetMapping("/admin/orders")
+    public String adminOrders()
+    {
+        return "admin_order";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -263,6 +262,15 @@ public class HomeController
         model.addAttribute("product", product);
         model.addAttribute("contains", contain);
         return "client_product_details";
+    }
+
+    @PostMapping("/search")
+    public String searchProducts(@RequestParam String pattern,
+                                 Model model)
+    {
+        List<Product> searchProducts = productService.searchProducts(pattern);
+        model.addAttribute("products",searchProducts);
+        return "search";
     }
 }
 

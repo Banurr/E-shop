@@ -16,7 +16,7 @@ public class CommentController
     private CommentService commentService;
 
     @GetMapping("/all")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Comment> allComments()
     {
         return commentService.allComments();
