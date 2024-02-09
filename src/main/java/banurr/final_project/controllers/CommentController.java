@@ -16,7 +16,7 @@ public class CommentController
     private CommentService commentService;
 
     @GetMapping("/all")
-//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public List<Comment> allComments()
     {
         return commentService.allComments();
@@ -27,5 +27,14 @@ public class CommentController
     public void deleteComment(@RequestBody Long id)
     {
         commentService.deleteComment(id);
+    }
+
+    @PostMapping("/add")
+    @PreAuthorize("isAuthenticated()")
+    public void addComment(@RequestParam(name="comment") String comment,
+                           @RequestParam(name="rate") int rate,
+                           @RequestParam(name="product_id") Long product_id)
+    {
+        commentService.addComment(comment,rate,product_id);
     }
 }

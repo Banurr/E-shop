@@ -33,13 +33,18 @@
                 let orders = JSON.parse(req.responseText)
                 for(let i = 0;i<orders.length;i++)
                 {
+                    let total = 0;
                     html += "<tr>"
                     html += "<td><h4>"+orders[i].id+"</h4></td>"
                     html += "<td><h4>"+orders[i].user.name+"</h4></td>"
                     html += "<td><button class='btn btn-primary' type='button' data-toggle='modal' data-target='#info" + orders[i].id + "'>Products</button>";
                     html += "</td>"
                     html += "<td><h4>"+orders[i].dateTime+"</h4></td>"
-                    html += "<td><h4>"+orders[i].total+"</h4></td>"
+                    for(let j = 0;j<orders[i].orderItems.length;j++)
+                    {
+                        total += orders[i].orderItems[j].product.price*orders[i].orderItems[j].quantity;
+                    }
+                    html += "<td><h4>"+total+"</h4></td>"
                     html += "<td><h4>"+orders[i].orderStatus+"</h4></td>"
                     html += "<div class='modal fade' id='info" + orders[i].id + "' tabindex='-1' role='dialog' aria-labelledby='deleteModalLabel' aria-hidden='true'>";
                     html += "<div class='modal-dialog modal-dialog-centered' role='document'>";

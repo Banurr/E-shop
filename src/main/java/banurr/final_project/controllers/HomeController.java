@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 public class HomeController
@@ -37,6 +38,13 @@ public class HomeController
 
     @Autowired
     private HttpSession httpSession;
+
+    @Autowired
+    private EmailSenderService emailSenderService;
+
+    private User recovery_user;
+
+    private String code;
 
     @GetMapping("/")
     public String home()
@@ -271,6 +279,48 @@ public class HomeController
         List<Product> searchProducts = productService.searchProducts(pattern);
         model.addAttribute("products",searchProducts);
         return "search";
+    }
+
+
+    @GetMapping("/forgot")
+    @PreAuthorize("isAnonymous()")
+    public String forgotPassword()
+    {
+        return "forgot";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/send")
+    public String sendRecovery(@RequestParam String user_email)
+    {
+        recovery_user = (User) userService.loadUserByUsername(user_email);
+        if(recovery_user != null)
+        {
+            Random random = new Random();
+            code = String.valueOf(random.nextInt(999999-100000)+1000000);
+            emailSenderService.sendEmail(user_email,"Recover password", code);
+            return "redirect:/forgot?sent";
+        }
+        return "redirect:/forgot?mail&no";
+    }
+
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/checkRecover")
+    public String checkRecovery(@RequestParam String user_code)
+    {
+        return code.equals(user_code) ? "redirect:/forgot?success" : "redirect:/forgot?sent&wrong";
+    }
+    @PreAuthorize("isAnonymous()")
+    @PostMapping("/recoverPassword")
+    public String recoverPassword(@RequestParam String newPassword,
+                                  @RequestParam String renewPassword)
+    {
+        if(!newPassword.equals(renewPassword)) return "redirect:/forgot?success&differ";
+        else
+        {
+            userService.recoverPassword(recovery_user,newPassword);
+            return "redirect:/sign-in?updated";
+        }
     }
 }
 

@@ -49,11 +49,9 @@ public class UserService implements UserDetailsService
     }
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException
+    public UserDetails loadUserByUsername(String email)
     {
-        User user = userRepository.findByEmail(email);
-        if(user == null) throw new UsernameNotFoundException("User not found!");
-        return user;
+        return userRepository.findByEmail(email);
     }
 
     public String addUser(User user, String rePassword)
@@ -83,6 +81,12 @@ public class UserService implements UserDetailsService
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
         return "profile?success";
+    }
+
+    public void recoverPassword(User recovery_user, String newPassword)
+    {
+        recovery_user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(recovery_user);
     }
 
     public void updateDetails(String name, String surname)
