@@ -2,11 +2,11 @@ spring:
 #    datasource:
 #        url: jdbc:postgresql://localhost:1234/Eshop
 #        username: postgres
-#        password: s63amg
+#        password: postgres
 #    flyway:
 #        url: jdbc:postgresql://localhost:1234/Eshop
 #        user: postgres
-#        password: s63amg
+#        password: postgres
 #        locations: classpath:db/migration
     servlet:
         multipart:
