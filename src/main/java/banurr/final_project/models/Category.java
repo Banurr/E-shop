@@ -11,17 +11,20 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="categories")
+@Table(name="CATEGORIES")
 @Builder
 public class Category
 {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID", nullable = false)
     private Long id;
 
+    @Column(name = "NAME")
     private String name;
 
+    @Column(name = "PICTURE")
     private String picture;
 
     @JsonIgnore

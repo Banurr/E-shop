@@ -12,24 +12,31 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="products")
+@Table(name="PRODUCTS")
 @Builder
 public class Product
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID", nullable = false)
     private Long id;
 
+    @Column(name="NAME")
     private String name;
 
+    @Column(name="DESCRIPTION")
     private String description;
 
+    @Column(name="PRICE")
     private Long price;
 
+    @Column(name="QUANTITY")
     private int quantity;
 
+    @Column(name="PICTURE")
     private String picture;
 
+    @JoinColumn(name="CATEGORY_ID")
     @ManyToOne(fetch = FetchType.EAGER)
     private Category category;
 

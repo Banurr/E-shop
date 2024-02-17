@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.hibernate:hibernate-core:6.1.7.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -30,7 +31,6 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'org.postgresql:postgresql'
 	annotationProcessor 'org.projectlombok:lombok'
-//	implementation group: 'org.flywaydb', name: 'flyway-core', version: '9.22.2'
 	implementation 'org.mapstruct:mapstruct:1.5.5.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 	implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
@@ -38,7 +38,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation group: 'nz.net.ultraq.thymeleaf', name: 'thymeleaf-layout-dialect', version: '3.1.0'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
-//	implementation 'org.flywaydb:flyway-core'
 	implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }

@@ -8,16 +8,19 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="orderitems")
+@Table(name="ORDERITEMS")
 @Builder
 public class OrderItem
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID",nullable = false)
     private Long id;
 
+    @JoinColumn(name="PRODUCT_ID")
     @ManyToOne(fetch = FetchType.EAGER)
     private Product product;
 
+    @Column(name="QUANTITY")
     private int quantity;
 }

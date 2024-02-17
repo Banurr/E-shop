@@ -10,22 +10,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="orders")
+@Table(name="ORDERS")
 @Builder
 public class Order
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID", nullable = false)
     private Long id;
 
+    @JoinColumn(name="USER_ID")
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
 
     @OneToMany(fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
+    @Column(name="DATE_TIME")
     private LocalDateTime dateTime;
 
+    @Column(name="ORDER_STATUS")
     private OrderStatus orderStatus;
 
     public double orderTotal()

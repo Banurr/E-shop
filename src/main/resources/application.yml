@@ -1,22 +1,32 @@
 spring:
-    datasource:
-        url: jdbc:postgresql://localhost:5432/final_project
-        username: postgres
-        password: s63amg
-    jpa:
-        hibernate:
-            ddl-auto: update
-        show-sql: true
+#    datasource:
+#        url: jdbc:postgresql://localhost:1234/Eshop
+#        username: postgres
+#        password: s63amg
+#    flyway:
+#        url: jdbc:postgresql://localhost:1234/Eshop
+#        user: postgres
+#        password: s63amg
+#        locations: classpath:db/migration
     servlet:
         multipart:
             max-file-size: 200MB
             max-request-size: 200MB
-
+    mail:
+        host: smtp.gmail.com
+        port: 587
+        username: hanzohasashi752@gmail.com
+        password: iecyxqquycvnjoos
+        properties:
+            mail:
+                smtp:
+                    auth: true
+                    starttls:
+                        enable: true
 server:
     servlet:
         session:
             timeout: '300s'
-
 loadPictureUrl: static/pictures/
 targetPictureUrl: build/resources/main/static/pictures/
 

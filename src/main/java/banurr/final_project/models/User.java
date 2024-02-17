@@ -14,23 +14,29 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="users")
+@Table(name="USERS")
 @Builder
 @ToString
 public class User implements UserDetails
 {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="ID",nullable = false)
     private Long id;
 
+    @Column(name="NAME")
     private String name;
 
+    @Column(name="SURNAME")
     private String surname;
 
+    @Column(name="EMAIL")
     private String email;
 
+    @Column(name="PASSWORD")
     private String password;
 
+    @Column(name="PICTURE")
     private String picture;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
