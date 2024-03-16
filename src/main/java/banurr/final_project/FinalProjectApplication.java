@@ -7,9 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 
 @SpringBootApplication
-public class FinalProjectApplication {
-
-
+public class FinalProjectApplication
+{
 	public static void main(String[] args)
 	{
 		SpringApplication.run(FinalProjectApplication.class, args);

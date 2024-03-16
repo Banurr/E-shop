@@ -1,13 +1,13 @@
 spring:
-#    datasource:
-#        url: jdbc:postgresql://localhost:1234/Eshop
-#        username: postgres
-#        password: postgres
-#    flyway:
-#        url: jdbc:postgresql://localhost:1234/Eshop
-#        user: postgres
-#        password: postgres
-#        locations: classpath:db/migration
+    datasource:
+        url: jdbc:postgresql://localhost:5432/eshop
+        username: postgres
+        password: postgres
+    flyway:
+        url: jdbc:postgresql://localhost:5432/eshop
+        user: postgres
+        password: postgres
+        locations: classpath:db/migration
     servlet:
         multipart:
             max-file-size: 200MB
@@ -15,8 +15,8 @@ spring:
     mail:
         host: smtp.gmail.com
         port: 587
-        username: hanzohasashi752@gmail.com
-        password: iecyxqquycvnjoos
+        username: mailsenderforproject11@gmail.com
+        password: jnbzcvipxsaqupux
         properties:
             mail:
                 smtp:

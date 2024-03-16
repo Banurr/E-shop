@@ -7,6 +7,8 @@ import banurr.final_project.models.User;
 import banurr.final_project.services.*;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,9 +34,10 @@ public class HomeController
     private FeatureService featureService;
     @Autowired
     private OrderService orderService;
-
     @Autowired
     private PictureController pictureController;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Autowired
     private HttpSession httpSession;
@@ -297,7 +300,7 @@ public class HomeController
         if(recovery_user != null)
         {
             Random random = new Random();
-            code = String.valueOf(random.nextInt(999999-100000)+1000000);
+            code = "Your recovery code is : \n"+(random.nextInt(999999 - 100000) + 1000000);
             emailSenderService.sendEmail(user_email,"Recover password", code);
             return "redirect:/forgot?sent";
         }
