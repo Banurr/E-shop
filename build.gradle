@@ -46,7 +46,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'FinalProjectApplication'
+		attributes 'Main-Class': 'final_project.FinalProjectApplication'
 	}
 }
 
