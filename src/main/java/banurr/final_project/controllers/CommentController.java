@@ -36,5 +36,6 @@ public class CommentController
                            @RequestParam(name="product_id") Long product_id)
     {
         commentService.addComment(comment,rate,product_id);
+
     }
 }

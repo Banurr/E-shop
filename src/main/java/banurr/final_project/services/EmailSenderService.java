@@ -11,6 +11,12 @@ public class EmailSenderService
     @Autowired
     private JavaMailSender javaMailSender;
 
+    /**
+     *
+     * @param toEmail
+     * @param subject
+     * @param body
+     */
     public void sendEmail(String toEmail, String subject, String body)
     {
         SimpleMailMessage message = new SimpleMailMessage();
@@ -20,4 +26,5 @@ public class EmailSenderService
         message.setTo(toEmail);
         javaMailSender.send(message);
     }
+
 }

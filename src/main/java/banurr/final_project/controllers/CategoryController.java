@@ -66,8 +66,8 @@ public class CategoryController
     public ResponseEntity<String> setPhoto(@RequestPart(name="file") MultipartFile multipartFile,
                                            @PathVariable(name = "id") Long id) throws IOException
     {
-        categoryService.setPhotoCategory(multipartFile,id);
         pictureController.addPictureLocal(multipartFile);
+        categoryService.setPhotoCategory(multipartFile,id);
         return ResponseEntity.ok(redirectUrl);
     }
 
