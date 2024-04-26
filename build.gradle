@@ -44,6 +44,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 
+jar {
+	manifest {
+		attributes 'Main-Class': 'banurr.final_project.FinalProjectApplication'
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }
