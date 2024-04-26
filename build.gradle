@@ -46,7 +46,7 @@ dependencies {
 
 jar {
 	manifest {
-		attributes 'Main-Class': 'banurr.final_project.FinalProjectApplication'
+		attributes 'Main-Class': 'FinalProjectApplication'
 	}
 }
 
